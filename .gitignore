@@ -1,2 +1,7 @@
 build.env
 run.env
+
+
+*.mp4
+*.avi
+*.webm

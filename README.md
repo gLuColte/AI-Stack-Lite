@@ -6,6 +6,16 @@ Following the links:
 - [Get started with Mojo🔥](https://docs.modular.com/mojo/manual/get-started/index.html)
 - [How to install Mojo🔥locally using Docker](https://medium.com/@1ce.mironov/how-to-install-mojo-locally-using-docker-5346bc23a9fe)
 
+## TODOs
+
+- Local Inference Script Update
+- Live Inference Script Update
+- Count Update
+- Influx DB setup
+- Live Inference with Data Insert
+- Live Inference Speed
+- ReadMe Documentation, expand on this overall project
+
 ## Setup
 
 Start by creating env files in the root level:
@@ -57,6 +67,7 @@ docker-compose -f docker-compose.yml up
 
 ## Monitoring
 
-Grafana
-Prometheus + Alert Manager
-Node Exporter / Cadvisor + Reddis
+In a general aspect of things, the understanding of the relationship inbetween are as follow:
+- Grafana: Dashboard, mainly for Data visualization
+- Prometheus + Alert Manager
+- Node Exporter / Cadvisor + Reddis

@@ -31,10 +31,29 @@ services:
   ####################################
   ########### Python Module ##########
   ####################################
-  python-module:
+  python-module-1:
     image: mojo-run-1:latest
     ports:
-      - 8000:5000/tcp
+      - 8001:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/gpu-live-inference-keypoint.py
+      - MODEL_PATH=yolov8n-pose.pt
+      - VISUALIZATION=1
+      - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
+      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
+    # Deploy on GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  python-module-2:
+    image: mojo-run-1:latest
+    ports:
+      - 8002:5000/tcp
     environment:
       - RUN_TYPE=python
       - RUN_SCRIPT_PATH=apps/python/gpu-live-inference-keypoint.py
@@ -50,6 +69,24 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+
+  ####################################
+  ############# InfluxDB #############
+  ####################################
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks:
+      - default
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      - $DOCKERDIR/appdata/influxdb2/config:/etc/influxdb2
+      - $DOCKERDIR/appdata/influxdb2/db:/var/lib/influxdb2
+
   ####################################
   ########## Node Exporter ###########
   ####################################

@@ -1,5 +1,15 @@
 # Modular-AI-Playground
 
+This repository
+
+
+Problem Statement:
+```
+```
+
+
+## Reference Sites
+
 Following the links:
 
 - [Enhancing AI Development with Mojo: Code Examples and Best Practices](https://artificialcorner.com/enhancing-ai-development-with-mojo-code-examples-and-best-practices-6341c3e66e15)
@@ -67,7 +77,10 @@ docker-compose -f docker-compose.yml up
 
 ## Monitoring
 
-In a general aspect of things, the understanding of the relationship inbetween are as follow:
-- Grafana: Dashboard, mainly for Data visualization
-- Prometheus + Alert Manager
-- Node Exporter / Cadvisor + Reddis
+## Problem Statement + Solution Created ( Portfolio )
+## Describing competiencies and driving towards solution
+
+## Raw Video + Inferenced Video > Readme
+
+## COde used, SOlution You made
+## What Video it is using and output

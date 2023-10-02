@@ -40,3 +40,6 @@ thop  # FLOPs computation
 
 # YOLO
 ultralytics
+
+# InfluxDB
+influxdb-client

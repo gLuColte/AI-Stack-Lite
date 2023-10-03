@@ -1,36 +1,40 @@
 # Modular-AI-Playground
 
-In today's AI-driven landscape, real-time monitoring and visualization of AI inference results are essential. As AI models process vast datasets and produce outputs, the ability to interpret these results in real-time and ensure the system's health is crucial. While traditional monitoring tools serve many purposes, there's a unique set of requirements for AI workloads that might necessitate specialized solutions. Embracing containerization and orchestration techniques, there's a growing emphasis on local solutions that can act as testing beds, simulating cloud-like production environments. This approach, leveraging technologies like Docker and Kubernetes, is especially valuable during the development and testing phases, ensuring a seamless transition to cloud deployments.
+In the realm of artificial intelligence, the process of inference involves deploying trained models to make predictions on new data. As these inferences are made, especially in real-time scenarios, it becomes imperative to monitor the results for accuracy, anomalies, and performance. Monitoring in real-time ensures that the AI system is functioning optimally and provides actionable insights. Visualization complements monitoring by offering a graphical representation of the AI's performance metrics, making it easier for stakeholders to understand and act upon.
+
+However, setting up such a system in a cloud environment directly can be resource-intensive and might not be ideal during the initial development and testing phases. This is where the concept of a localized system comes into play. By creating a local environment that mirrors the cloud, developers can test, monitor, and visualize AI inferences without the overheads of a full-scale cloud deployment.
+
+Furthermore, with the rise of container technologies like Docker, it's now possible to package the AI module, monitoring tools, and visualization dashboards into isolated containers. This ensures consistency, scalability, and portability across different stages of development. Orchestration, using systems like Kubernetes, automates the deployment, scaling, and management of these containers, simulating a cloud-like environment on a local setup.
 
 ## Problem Statement
 
-Develop a local, containerized solution that:
-- Runs AI Inference: The system should incorporate an independent AI module capable of processing data and producing time-series results.
-- Stores Results: Given the time-series nature of the AI outputs, an efficient database optimized for time-series data storage is essential.
-- Visualizes Data: A real-time visualization tool is required to interpret the AI's results, enabling stakeholders to gauge its performance and derive actionable insights.
-- Monitors System Health: With the interconnectedness of components, from the AI module to the database, continuous monitoring of the system's health and performance is crucial.
+We need a solution that allows for real-time AI inference monitoring and visualization within a local, containerized environment, ensuring seamless scalability and transition to cloud deployments.
+
+## Problem 
+The challenge lies in developing a localized, containerized solution that:
+
+1. **Runs AI Inference**: Incorporates a standalone AI module adept at processing data and generating time-series results.
+2. **Stores and Retrieves Results**: An efficient mechanism to store time-series AI outputs and ensure swift data retrieval.
+3. **Visualizes Data**: A dynamic visualization tool that offers real-time insights into the AI's performance, aiding stakeholders in decision-making.
+4. **Monitors System Health**: A robust monitoring system that provides a holistic view of all components, from AI processing to data storage.
+5. **Orchestrates Workloads**: Utilizes orchestration tools to manage, scale, and automate tasks, ensuring the local environment closely simulates cloud deployments.
 
 ## Objective
-```
-Design and implement a solution that integrates an AI module, InfluxDB for time-series data storage, Grafana for data visualization, and Prometheus for system monitoring. Crucially, the entire solution should be containerized using docker-compose to allow developers and testers to simulate the runtime environment locally, ensuring a seamless transition from development to production.
 
-PLUS: 
-- Comparing Modular VS Python Run Speed by running CPU intensive operations
-- Setup Simple YOLO Training Commands
-```
+To design and implement a solution that seamlessly integrates an AI module, efficient data storage mechanisms, dynamic visualization tools, and comprehensive monitoring systems. This solution should be containerized and orchestrated, allowing for easy deployment, scaling, and management, all while simulating a cloud-like environment locally.
 
-## Local Simulation using Docker-Compose
-The solution should be easily deployable on any local machine using docker-compose. This local setup aims to replicate the production environment, allowing for:
-- Rapid prototyping and testing without cloud overhead.
-- Simulating real-world scenarios and workloads.
-- Efficient debugging in an isolated, controlled environment.
+## Local Simulation
+The solution should be deployable on local machines using containerization tools like Docker and orchestrated using platforms like Docker-Compose/Kubernetes. This setup aims to:
+
+- Facilitate rapid prototyping and testing in a controlled environment.
+- Simulate real-world cloud scenarios and workloads.
+- Offer efficient debugging and troubleshooting capabilities.
 
 ## Constraints
 - The AI module should remain modular and independent for straightforward updates and modifications.
 - Data persistence must be ensured, even in the event of container failures.
 - Real-time visualization capabilities should allow for specific time interval analyses.
 - Comprehensive monitoring should cover all components, offering timely alerts for any anomalies.
-
 
 ## TODOs
 - [X] Local Inference Script Update
@@ -41,6 +45,8 @@ The solution should be easily deployable on any local machine using docker-compo
 - [ ] Live Inference Speed
 - [ ] GPU Device Monitoring
 - [ ] ReadMe Documentation, expand on this overall project
+- [ ] Kubernetes Setup
+- [ ] Cloud Deployment
 
 ## Setup
 

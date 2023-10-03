@@ -1,7 +1,7 @@
+# Build Envs
 build.env
-run.env
 
-
-*.mp4
+# Media file
+# *.mp4
 *.avi
 *.webm

@@ -15,8 +15,8 @@ import time
 ##########################################################
 
 model_path="yolo-Weights/yolov8n-pose.pt"
-input_video="C:/Users/kanli/Documents/GitHub/Modular-AI-Playground/mediamtx-module/sample-inputs/videos/MOT20-02-raw.webm"
-output_video="C:/Users/kanli/Documents/GitHub/Modular-AI-Playground/data/inferenced_output/" + os.path.basename(model_path).split(".")[0] + os.path.basename(input_video).split(".")[0] + ".mp4"
+input_video="/home/garylu/Github/Modular-AI-Playground/mediamtx-module/sample-inputs/videos/MOT1602raw.mp4"
+output_video="/home/garylu/Github/Modular-AI-Playground/" + os.path.basename(model_path).split(".")[0] + os.path.basename(input_video).split(".")[0] + ".mp4"
 fps = 1
 
 

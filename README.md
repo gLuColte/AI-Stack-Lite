@@ -18,13 +18,13 @@ Following the links:
 
 ## TODOs
 
-- Local Inference Script Update
-- Live Inference Script Update
-- Count Update
-- Influx DB setup
-- Live Inference with Data Insert
-- Live Inference Speed
-- ReadMe Documentation, expand on this overall project
+- [ ] Local Inference Script Update
+- [ ] Live Inference Script Update
+- [ ] Count Update
+- [ ] Influx DB setup
+- [ ] Live Inference with Data Insert
+- [ ] Live Inference Speed
+- [ ] ReadMe Documentation, expand on this overall project
 
 ## Setup
 

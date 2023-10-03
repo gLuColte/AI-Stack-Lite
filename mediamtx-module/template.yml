@@ -40,17 +40,17 @@ externalAuthenticationURL:
 # Enable the HTTP API.
 api: no
 # Address of the API listener.
-apiAddress: 127.0.0.1:9997
+apiAddress: 0.0.0.0:9997
 
 # Enable Prometheus-compatible metrics.
 metrics: no
 # Address of the metrics listener.
-metricsAddress: 127.0.0.1:9998
+metricsAddress: 0.0.0.0:9998
 
 # Enable pprof-compatible endpoint to monitor performances.
 pprof: no
 # Address of the pprof listener.
-pprofAddress: 127.0.0.1:9999
+pprofAddress: 0.0.0.0:9999
 
 # Command to run when a client connects to the server.
 # This is terminated with SIGINT when a client disconnects from the server.

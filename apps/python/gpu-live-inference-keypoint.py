@@ -24,10 +24,10 @@ import time
 ####################### Functions ########################
 ##########################################################
 
-def open_ffmpeg_stream_process(stream_path):
+def open_ffmpeg_stream_process(stream_path, input_height, input_width):
     args = (
         "ffmpeg -re -f rawvideo -pix_fmt "
-        "rgb24 -s 1920x1080 -i pipe:0 -pix_fmt yuvj420p "
+        f"rgb24 -s {input_height}x{input_width} -i pipe:0 -pix_fmt rgb24 "
         f"-f rtsp {stream_path}"
     ).split()
     return subprocess.Popen(args, stdin=subprocess.PIPE)
@@ -45,8 +45,16 @@ if __name__ == "__main__":
     input_stream=os.environ['RTSP_INPUT']
     output_stream=os.environ['RTSP_OUTPUT']
     visualization=bool(int(os.environ['VISUALIZATION']))
-    ffmpeg_process = open_ffmpeg_stream_process(output_stream)
-    capture = cv2.VideoCapture(input_stream)    
+    capture = cv2.VideoCapture(input_stream)
+    
+    # Reading first frame to prepare 
+    success, img = capture.read()
+    width, height, channels = img.shape
+    print(f"Frame Height = {height}, Frame Width = {width}")
+
+    # Setup output
+    ffmpeg_process = open_ffmpeg_stream_process(output_stream, height, width)
+          
     while True:
         success, img = capture.read()
         if not success:

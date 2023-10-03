@@ -49,4 +49,4 @@ RUN pip3 install torch torchvision torchaudio -f https://download.pytorch.org/wh
 RUN python3 -m pip install -r /workspace/build/python-requirements.txt
 
 # Install MOJO with Secret
-RUN /workspace/build/build.sh
+ENTRYPOINT ["sh", "/workspace/build/build.sh"]

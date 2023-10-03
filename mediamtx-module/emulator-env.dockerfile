@@ -43,4 +43,4 @@ COPY --from=mediamtx /mediamtx /
 #####################################
 ############# Execute RUN ###########
 #####################################
-ENTRYPOINT [ "./run.sh" ]
+ENTRYPOINT ["sh", "run.sh" ]

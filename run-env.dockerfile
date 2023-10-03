@@ -30,4 +30,4 @@ ENV DEBIAN_FRONTEND=noninteractive
 #####################################
 ############# Execute RUN ###########
 #####################################
-ENTRYPOINT [ "./run.sh" ]
+ENTRYPOINT ["sh", "./run.sh"]

@@ -21,8 +21,8 @@ services:
       - rtsp-live-stream-1=live-1
       - rtsp-live-stream-2=live-2
       - rtsp-live-stream-3=live-3
-      - rtsp-sample-crosswalk1.avi=sample-1
-      - rtsp-sample-crosswalk2.mp4=sample-2
+      - rtsp-sample-MOT1608raw.mp4=sample-1
+      - rtsp-sample-MOT1602raw.mp4=sample-2
 
   ####################################
   ############ MoJo Module ###########
@@ -39,7 +39,7 @@ services:
       - RUN_TYPE=python
       - RUN_SCRIPT_PATH=apps/python/gpu-live-inference-keypoint.py
       - MODEL_PATH=yolov8n-pose.pt
-      - VISUALIZATION=1
+      - VISUALIZATION=0
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
       - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
     # Deploy on GPU

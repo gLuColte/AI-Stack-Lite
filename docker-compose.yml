@@ -3,12 +3,6 @@ volumes:
   prometheus_data: {}
   grafana_data: {}
 
-
-
-networks:
-  monitoring:
-    driver: bridge
-
 services:
   ####################################
   ########## MediaMTX Module #########
@@ -79,9 +73,17 @@ services:
     restart: unless-stopped
     ports:
       - "8086:8086"
-    volumes:
-      - $DOCKERDIR/appdata/influxdb2/config:/etc/influxdb2
-      - $DOCKERDIR/appdata/influxdb2/db:/var/lib/influxdb2
+    # volumes:
+    #   - /infludb/config:/etc/influxdb2
+    #   - /infludb/db:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=ai-playground
+      - DOCKER_INFLUXDB_INIT_BUCKET=alien-observatory
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=temperature123
+
 
   ####################################
   ########## Node Exporter ###########

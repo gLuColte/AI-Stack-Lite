@@ -42,4 +42,4 @@ thop  # FLOPs computation
 ultralytics
 
 # InfluxDB
-influxdb-client
+influxdb

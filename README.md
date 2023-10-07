@@ -1,5 +1,5 @@
 
-![AI Stack Lige](/markdown-images/icon.png)
+![AI Stack Lige](/markdown-images/main-logo.png)
 
 ## Background
 

@@ -5,3 +5,6 @@ build.env
 # *.mp4
 *.avi
 *.webm
+
+# Power Point
+*.pptx

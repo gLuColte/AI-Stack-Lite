@@ -36,6 +36,12 @@ The solution should be deployable on local machines using containerization tools
 - Real-time visualization capabilities should allow for specific time interval analyses.
 - Comprehensive monitoring should cover all components, offering timely alerts for any anomalies.
 
+## Architecture
+
+This repository presents our proposed architecture designed to streamline monitoring and orchestration processes for containerized applications. The architecture is divided into four primary layers: Visualization, Databases, Modules, and Orchestration. It integrates powerful tools like Grafana, Prometheus, and InfluxDB for efficient data visualization and storage. On the module front, it incorporates cAdvisor, Node Exporter, and specialized AI inference modules for comprehensive data collection and processing. For orchestration, we propose a flexible approach, allowing users to choose between Docker Compose and Kubernetes, all running on the robust Ubuntu operating system. This architecture ensures efficient data flow, from raw metrics collection to insightful visualization, ensuring optimal performance and observability of your applications.
+
+![Architecture](/markdown-images/architecture.png)
+
 ## TODOs
 - [X] Local Inference Script Update
 - [X] Live Inference Script Update - Fix Output stream Dimensions

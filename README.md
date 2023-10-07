@@ -1,4 +1,4 @@
-# Modular-AI-Playground
+# AISimulateSuite
 
 In the realm of artificial intelligence, the process of inference involves deploying trained models to make predictions on new data. As these inferences are made, especially in real-time scenarios, it becomes imperative to monitor the results for accuracy, anomalies, and performance. Monitoring in real-time ensures that the AI system is functioning optimally and provides actionable insights. Visualization complements monitoring by offering a graphical representation of the AI's performance metrics, making it easier for stakeholders to understand and act upon.
 
@@ -10,7 +10,8 @@ Furthermore, with the rise of container technologies like Docker, it's now possi
 
 We need a solution that allows for real-time AI inference monitoring and visualization within a local, containerized environment, ensuring seamless scalability and transition to cloud deployments.
 
-## Problem 
+## Problem
+
 The challenge lies in developing a localized, containerized solution that:
 
 1. **Runs AI Inference**: Incorporates a standalone AI module adept at processing data and generating time-series results.
@@ -24,6 +25,7 @@ The challenge lies in developing a localized, containerized solution that:
 To design and implement a solution that seamlessly integrates an AI module, efficient data storage mechanisms, dynamic visualization tools, and comprehensive monitoring systems. This solution should be containerized and orchestrated, allowing for easy deployment, scaling, and management, all while simulating a cloud-like environment locally.
 
 ## Local Simulation
+
 The solution should be deployable on local machines using containerization tools like Docker and orchestrated using platforms like Docker-Compose/Kubernetes. This setup aims to:
 
 - Facilitate rapid prototyping and testing in a controlled environment.
@@ -31,6 +33,7 @@ The solution should be deployable on local machines using containerization tools
 - Offer efficient debugging and troubleshooting capabilities.
 
 ## Constraints
+
 - The AI module should remain modular and independent for straightforward updates and modifications.
 - Data persistence must be ensured, even in the event of container failures.
 - Real-time visualization capabilities should allow for specific time interval analyses.
@@ -43,6 +46,7 @@ This repository presents our proposed architecture designed to streamline monito
 ![Architecture](/markdown-images/architecture.png)
 
 ## TODOs
+
 - [X] Local Inference Script Update
 - [X] Live Inference Script Update - Fix Output stream Dimensions
 - [ ] Live Count Update
@@ -105,6 +109,7 @@ docker-compose -f docker-compose.yml up
 ## AI Inference
 
 As an illustration, following shows the configuration of an emulator module and 2 Live Inference Module:
+
 ```docker-compose
 services:
   ####################################
@@ -164,9 +169,10 @@ services:
 
 ```
 
-The emulator module contains 5 main streams, 2 replays sample footage (MOT1608raw.mp4 and MOT1602raw.mp4) recursively, and 3 live stream path opening wait for publishing. 
+The emulator module contains 5 main streams, 2 replays sample footage (MOT1608raw.mp4 and MOT1602raw.mp4) recursively, and 3 live stream path opening wait for publishing.
 
-The python modules individually takes in the given $RTSP_INPUT and publish to $RTSP_OUTPUT based on given configurations: 
+The python modules individually takes in the given $RTSP_INPUT and publish to $RTSP_OUTPUT based on given configurations:
+
 - $RUN_TYPE = Language to execute
 - $RUN_SCRIPT = Script to execute
 - $MODEL_PATH = Model to be used
@@ -180,6 +186,7 @@ Raw Video             |  Inferenced Video
 ## Monitoring
 
 In terms of Monitoring, following reference links, the docker-compose is setup as below:
+
 ```docker-compose
   # Expose Host Machine Hardware Metrics 
   node-exporter:
@@ -259,14 +266,13 @@ In terms of Monitoring, following reference links, the docker-compose is setup a
 
 The uses of off-the-shelf modules (Grafana, Prometheus, node-exporter, cadvisor) and setup to monitor Host and docker environments:
 
-Node Exporter         | 
+Node Exporter         |
 :--------------------:|
 ![Node Exporter](/markdown-images/node-exporter.png)
 
-cAdvisor              | 
+cAdvisor              |
 :--------------------:|
 ![cAdvisor](/markdown-images/cadvisor.png)
-
 
 ## Reference Sites
 

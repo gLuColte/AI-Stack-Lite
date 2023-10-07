@@ -105,10 +105,16 @@ For debugging purpose, you can run only Single Module interactively:
 docker run -it --gpus all -t ai-stack-lite-base-1:latest
 ```
 
-For overall setup, please run with Docker-Compose:
+Using Docker-Compose:
 
 ```terminal
 docker-compose -f docker-compose.yml up
+```
+
+Using Kubernetes:
+
+```terminal
+
 ```
 
 ## AI Inference
@@ -126,6 +132,10 @@ As an example, you will see a similar input and output to the following:
 Raw Video             |  Inferenced Video
 :--------------------:|:--------------------:
 ![Raw Video](/markdown-images/MOT1602raw.gif)  |  ![Inferenced Video](/markdown-images/yolov8n-poseMOT1602raw.gif)
+
+Output Grafana Visualization:
+
+TBA
 
 ## Monitoring
 

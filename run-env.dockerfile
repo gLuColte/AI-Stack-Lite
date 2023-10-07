@@ -14,9 +14,9 @@ EXPOSE 5000
 ############# File Copy #############
 #####################################
 # Copy all files into file Copy
-ADD . /workspace/modular-ai-playground
+ADD . /workspace/ai-stack-lite
 # Change Directory
-WORKDIR /workspace/modular-ai-playground
+WORKDIR /workspace/ai-stack-lite
 
 # ! : Removing copied twice build
 RUN rm -Rf ./build

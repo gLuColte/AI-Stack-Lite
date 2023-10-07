@@ -63,6 +63,28 @@ This repository presents our proposed architecture designed to streamline monito
 
 ## Setup
 
+## Base Image Building
+
+Currently there is only a single Base Image. First, build Base image:
+
+```terminal
+docker build -f base-env.dockerfile -t ai-stack-lite-base-1 .
+```
+
+After building the base image, build Run image:
+
+```terminal
+docker build -f run-env.dockerfile -t ai-stack-lite-run-1 .
+```
+
+In order to simulate real world scenario, a Camera Stream is needed, in this case, [MediaMTX](https://github.com/bluenviron/mediamtx) is used to assist. Build MediaMTX image:
+
+```terminal
+docker build -f /mediamtx-module/emulator-env.dockerfile -t mediamtx-env-1 .
+```
+
+### Modular Token Key
+
 Start by creating env files in the build directory:
 
 ```terminal
@@ -75,25 +97,7 @@ Ensure the following variables are available in **build.env**:
 MOJO_KEY=<Your Key>
 ```
 
-## Build
 
-Currently there is only a single Base Image. First, build Base image:
-
-```terminal
-docker build -f base-env.dockerfile -t mojo-pytorch-base-1 .
-```
-
-After building the base image, build Run image:
-
-```terminal
-docker build -f run-env.dockerfile -t mojo-run-1 .
-```
-
-In order to simulate real world scenario, a Camera Stream is needed, in this case, [MediaMTX](https://github.com/bluenviron/mediamtx) is used to assist. Build MediaMTX image:
-
-```terminal
-docker build -f /mediamtx-module/emulator-env.dockerfile -t mediamtx-env-1 .
-```
 
 ## Execution
 

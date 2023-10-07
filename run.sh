@@ -27,7 +27,7 @@ figlet -t "AI Playground"
 # Run Scriptj
 banner "Starting Scripts"
 # Change Work Dir to Apps
-cd /workspace/modular-ai-playground
+cd /workspace/ai-stack-lite
 echo "Current working Directory:" $(pwd)
 echo "RUN_SCRIPT_PATH:" $RUN_SCRIPT_PATH
 echo "MODEL_PATH:" $MODEL_PATH

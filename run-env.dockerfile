@@ -2,7 +2,7 @@
 ############ Image Pull #############
 #####################################
 # Pull Cuda Environment
-FROM mojo-pytorch-base-1:latest
+FROM ai-stack-lite-base-1:latest
 
 #####################################
 ########## Configuration ############

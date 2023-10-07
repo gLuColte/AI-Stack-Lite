@@ -22,7 +22,7 @@ services:
   ########### Python Module ##########
   ####################################
   python-module-1:
-    image: mojo-run-1:latest
+    image: ai-stack-lite-run-1:latest
     ports:
       - 8001:5000/tcp
     environment:
@@ -41,7 +41,7 @@ services:
               count: 1
               capabilities: [gpu]
   python-module-2:
-    image: mojo-run-1:latest
+    image: ai-stack-lite-run-1:latest
     ports:
       - 8002:5000/tcp
     environment:

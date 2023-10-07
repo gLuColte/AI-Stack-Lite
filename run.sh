@@ -19,7 +19,7 @@ banner()
 ################ Start ##############
 #####################################
 # Start
-figlet -t "AI Playground"
+figlet -t "AI Stack Lite"
 
 #####################################
 ########### Execute Scripts #########

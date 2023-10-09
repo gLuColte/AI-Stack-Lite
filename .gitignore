@@ -1,5 +1,5 @@
 # Build Envs
-build.env
+build/build.env
 
 # Media file
 # *.mp4
@@ -10,4 +10,4 @@ build.env
 *.pptx
 
 # Others
-**/.vscode/
+.vscode

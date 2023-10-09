@@ -68,7 +68,7 @@ This repository presents our proposed architecture designed to streamline monito
 Currently there is only a single Base Image. First, build Base image:
 
 ```terminal
-docker build -f base-env.dockerfile -t ai-stack-lite-base-1 .
+docker build -f /build/base-env.dockerfile -t ai-stack-lite-base-1 .
 ```
 
 After building the base image, build Run image:

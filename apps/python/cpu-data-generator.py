@@ -16,14 +16,14 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 ##########################################################
 
 # Influx DB
-INFLUX_DB_URL = "http://192.168.1.194:8086/"
-INFLUX_DB_USERNAME = "admin"
-INFLUX_DB_PASSWORD = "admin123"
-INFLUX_DB_ORG = "ai-playground"
+INFLUX_DB_URL = os.environ['INFLUX_DB_URL']
+INFLUX_DB_USERNAME = os.environ['INFLUX_DB_USERNAME']
+INFLUX_DB_PASSWORD = os.environ['INFLUX_DB_PASSWORD']
+INFLUX_DB_ORG = os.environ['INFLUX_DB_ORG']
 
 # Generator Commands
-measurement_name = "census"
-bucket_name = "alien-observatory"
+MEASUREMENT_NAME = os.environ['MEASUREMENT_NAME']
+BUCKET_NAME = os.environ['BUCKET_NAME']
 
 ##########################################################
 ####################### Functions ########################
@@ -46,8 +46,8 @@ if __name__ == "__main__":
     count=1
     while True:
         for device_location_num in range(1,10):
-            p = influxdb_client.Point(
-                    measurement_name
+            data_point = influxdb_client.Point(
+                    MEASUREMENT_NAME
                 ).tag(
                     "location", f"Sector-{device_location_num:02d}"
                 ).field(
@@ -57,7 +57,7 @@ if __name__ == "__main__":
                 ).field(
                     "ailen_count", random.randint(0, 5)
                 )
-            write_api.write(bucket=bucket_name, org=INFLUX_DB_ORG, record=p)
-        print(f"Insert Count = {count}")
+            write_api.write(bucket=BUCKET_NAME, org=INFLUX_DB_ORG, record=data_point)
+        print(f"Inserted {count} records")
         time.sleep(1)
         count+=1

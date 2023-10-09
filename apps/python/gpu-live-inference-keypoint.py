@@ -20,6 +20,7 @@ import time
 #     - VISUALIZATION=0
 #     - RTSP_INPUT=rtsp://emulator-module:8554/sample-1 
 #     - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
+
 ##########################################################
 ####################### Functions ########################
 ##########################################################

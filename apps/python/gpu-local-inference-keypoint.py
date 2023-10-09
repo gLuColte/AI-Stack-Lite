@@ -15,7 +15,7 @@ import time
 ##########################################################
 
 model_path="yolo-Weights/yolov8n-pose.pt"
-input_video="/home/garylu/Github/AI-Stack-Lite/mediamtx-module/sample-inputs/videos/MOT1602raw.mp4"
+input_video="/home/garylu/Github/AI-Stack-Lite/mediamtx/sample-inputs/videos/MOT1602raw.mp4"
 output_video="/home/garylu/Github/AI-Stack-Lite/" + os.path.basename(model_path).split(".")[0] + os.path.basename(input_video).split(".")[0] + ".mp4"
 fps = 1
 

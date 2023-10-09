@@ -8,3 +8,6 @@ build.env
 
 # Power Point
 *.pptx
+
+# Others
+**/.vscode/

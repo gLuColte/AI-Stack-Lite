@@ -80,7 +80,7 @@ docker build -f run-env.dockerfile -t ai-stack-lite-run-1 .
 In order to simulate real world scenario, a Camera Stream is needed, in this case, [MediaMTX](https://github.com/bluenviron/mediamtx) is used to assist. Build MediaMTX image:
 
 ```terminal
-docker build -f /mediamtx-module/emulator-env.dockerfile -t mediamtx-env-1 .
+docker build -f /mediamtx/emulator-env.dockerfile -t mediamtx-env-1 .
 ```
 
 ### Modular Token Key

@@ -25,6 +25,22 @@ INFLUX_DB_ORG = os.environ['INFLUX_DB_ORG']
 MEASUREMENT_NAME = os.environ['MEASUREMENT_NAME']
 BUCKET_NAME = os.environ['BUCKET_NAME']
 
+
+# SAMPLE
+# python-module-3:
+#     image: ai-stack-lite-run-1:latest
+#     ports:
+#       - 8003:5000/tcp
+#     environment:
+#       - RUN_TYPE=python
+#       - RUN_SCRIPT_PATH=apps/python/cpu-data-generator.py
+#       - INFLUX_DB_URL=http://influxdb:8086
+#       - INFLUX_DB_USERNAME=admin
+#       - INFLUX_DB_PASSWORD=admin123
+#       - INFLUX_DB_ORD=ai-playground
+#       - MEASUREMENT_NAME=census
+#       - BUCKET_NAME=ailen-obersavtory
+
 ##########################################################
 ####################### Functions ########################
 ##########################################################

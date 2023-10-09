@@ -67,6 +67,9 @@ if __name__ == "__main__":
             # coordinates
             for r in results:
                 img = r.plot()
+                
+                
+                
         ffmpeg_process.stdin.write(img.astype(np.uint8).tobytes())
         
     capture.release()

@@ -52,14 +52,16 @@ This repository presents our proposed architecture designed to streamline monito
 
 - [X] Local Inference Script Update
 - [X] Live Inference Script Update - Fix Output stream Dimensions
-- [ ] Live Count Update
 - [X] Influx DB setup
-- [ ] Live Inference with Data Insert
-- [ ] Live Inference Speed
+- [X] Influx Python Local Inserter
+- [ ] Live Count Update
+- [ ] Live Inference Pictures with Data Insert
 - [ ] GPU Device Monitoring
-- [ ] ReadMe Documentation, expand on this overall project
+- [ ] Live Inference Speed / Accuracies Monitoring
 - [ ] Kubernetes Setup
-- [ ] Cloud Deployment
+- [ ] Alert Manager Setup
+- [ ] Cloud Deployment - Integration with Azure and AWS
+- [ ] ReadMe Documentation - Grafana/Influx/cAdvisor/NodeExporter/AlertManager
 
 ## Setup
 

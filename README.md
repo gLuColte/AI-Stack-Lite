@@ -68,7 +68,7 @@ This repository presents our proposed architecture designed to streamline monito
 Currently there is only a single Base Image. First, build Base image:
 
 ```terminal
-docker build -f /build/base-env.dockerfile -t ai-stack-lite-base-1 .
+docker build -f ./build/base-env.dockerfile -t ai-stack-lite-base-1 .
 ```
 
 After building the base image, build Run image:
@@ -80,7 +80,7 @@ docker build -f run-env.dockerfile -t ai-stack-lite-run-1 .
 In order to simulate real world scenario, a Camera Stream is needed, in this case, [MediaMTX](https://github.com/bluenviron/mediamtx) is used to assist. Build MediaMTX image:
 
 ```terminal
-docker build -f /mediamtx/emulator-env.dockerfile -t mediamtx-env-1 .
+docker build -f ./mediamtx/emulator-env.dockerfile -t mediamtx-env-1 .
 ```
 
 ### Modular Token Key
@@ -111,10 +111,11 @@ Using Docker-Compose:
 docker-compose -f docker-compose.yml up
 ```
 
-Using Kubernetes:
+Using Kubernetes (Ensure to have [minikube](https://github.com/kubernetes/minikube) installed):
 
 ```terminal
-
+minikube start
+kubectl 
 ```
 
 ## AI Inference

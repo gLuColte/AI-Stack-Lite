@@ -25,8 +25,8 @@ services:
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
       - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
       - DOCKER_INFLUXDB_INIT_ORG=ai-playground
-      - DOCKER_INFLUXDB_INIT_BUCKET=ailen-observatory
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=ailen123
+      - DOCKER_INFLUXDB_INIT_BUCKET=alien-observatory
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=alien123
 
 
   # ####################################
@@ -84,19 +84,19 @@ services:
   #           - driver: nvidia
   #             count: 1
   #             capabilities: [gpu]
-  # python-module-3:
-  #   image: ai-stack-lite-run-1:latest
-  #   ports:
-  #     - 8003:5000/tcp
-  #   environment:
-  #     - RUN_TYPE=python
-  #     - RUN_SCRIPT_PATH=apps/python/cpu-data-generator.py
-  #     - INFLUX_DB_URL=http://0.0.0.0:8086
-  #     - INFLUX_DB_USERNAME=admin
-  #     - INFLUX_DB_PASSWORD=admin123
-  #     - INFLUX_DB_ORG=ai-playground
-  #     - MEASUREMENT_NAME=census
-  #     - BUCKET_NAME=ailen-observatory
+  python-module-3:
+    image: ai-stack-lite-run-1:latest
+    ports:
+      - 8003:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/cpu-data-generator.py
+      - INFLUX_DB_URL=http://0.0.0.0:8086
+      - INFLUX_DB_USERNAME=admin
+      - INFLUX_DB_PASSWORD=admin123
+      - INFLUX_DB_ORG=ai-playground
+      - MEASUREMENT_NAME=census
+      - BUCKET_NAME=alien-observatory
 
   ####################################
   ########## Node Exporter ###########

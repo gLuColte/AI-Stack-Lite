@@ -23,10 +23,10 @@ INFLUX_DB_ORG = "ai-playground"
 
 # Generator Commands
 MEASUREMENT_NAME = "census"
-BUCKET_NAME = "ailen-observatory"
+BUCKET_NAME = "alien-observatory"
 
 # Miscellanous
-ailen_types = [
+alien_types = [
     "Water",
     "Fire",
     "Grass",
@@ -61,7 +61,7 @@ ailen_types = [
 #       - INFLUX_DB_PASSWORD=admin123
 #       - INFLUX_DB_ORD=ai-playground
 #       - MEASUREMENT_NAME=census
-#       - BUCKET_NAME=ailen-obersavtory
+#       - BUCKET_NAME=alien-obersavtory
 
 ##########################################################
 ####################### Functions ########################
@@ -93,13 +93,13 @@ if __name__ == "__main__":
                 ).field(
                     "human_count", random.randint(0, 20)
                 ).field(
-                    "ailen_count", random.randint(0, 5)
+                    "alien_count", random.randint(0, 5)
                 ).field(
                     "sunlight", bool(random.getrandbits(1))
                 ).field(
                     "lightray_size", round(random.uniform(0, 30), 2)
                 ).field(
-                    "ailen_type", random.choice(ailen_types)
+                    "alien_type", random.choice(alien_types)
                 )
                 
             write_api.write(bucket=BUCKET_NAME, org=INFLUX_DB_ORG, record=data_point)

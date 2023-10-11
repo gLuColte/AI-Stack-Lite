@@ -39,7 +39,7 @@ BUCKET_NAME = os.environ['BUCKET_NAME']
 #       - INFLUX_DB_PASSWORD=admin123
 #       - INFLUX_DB_ORD=ai-playground
 #       - MEASUREMENT_NAME=census
-#       - BUCKET_NAME=ailen-obersavtory
+#       - BUCKET_NAME=alien-obersavtory
 
 ##########################################################
 ####################### Functions ########################
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 ).field(
                     "human_count", random.randint(0, 20)
                 ).field(
-                    "ailen_count", random.randint(0, 5)
+                    "alien_count", random.randint(0, 5)
                 )
             write_api.write(bucket=BUCKET_NAME, org=INFLUX_DB_ORG, record=data_point)
         print(f"Inserted {count} records")

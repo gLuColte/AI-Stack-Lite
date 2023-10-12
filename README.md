@@ -113,7 +113,7 @@ Using Docker-Compose:
 docker-compose -f docker-compose.yml up
 ```
 
-Using Kubernetes (Ensure to have [minikube](https://github.com/kubernetes/minikube) installed):
+[NOT COMPLETED] Using Kubernetes (Ensure to have [minikube](https://github.com/kubernetes/minikube) installed):
 
 ```terminal
 minikube start

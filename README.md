@@ -58,6 +58,7 @@ This repository presents our proposed architecture designed to streamline monito
 - [ ] Live Inference Pictures with Data Insert
 - [ ] GPU Device Monitoring
 - [ ] Live Inference Speed / Accuracies Monitoring
+- [ ] Mojo vs Python Test
 - [ ] Kubernetes Setup
 - [ ] Alert Manager Setup
 - [ ] Cloud Deployment - Integration with Azure and AWS

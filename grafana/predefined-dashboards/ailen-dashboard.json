@@ -23,6 +23,19 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Summary",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "influxdb",
         "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
@@ -84,7 +97,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 4,
       "options": {
@@ -154,7 +167,7 @@
         "h": 15,
         "w": 13,
         "x": 0,
-        "y": 11
+        "y": 12
       },
       "id": 5,
       "options": {
@@ -217,7 +230,7 @@
         "h": 15,
         "w": 11,
         "x": 13,
-        "y": 11
+        "y": 12
       },
       "id": 6,
       "options": {
@@ -252,12 +265,101 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 27
       },
       "id": 3,
       "panels": [],
       "title": "Graph Visualization",
       "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "id": 7,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.1.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+          },
+          "query": "from(bucket: \"alien-observatory\")\r\n    |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n    |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n    |> filter(fn: (r) => r[\"_field\"] == \"alien_type\")\r\n\r\n    |> duplicate(column: \"_value\", as: \"alien_type\")\r\n    |> group(columns: [\"alien_type\"])\r\n    |> count()\r\n    |> group()",
+          "refId": "A"
+        }
+      ],
+      "title": "Alien Type Count (ALL Sectors)",
+      "type": "barchart"
     },
     {
       "datasource": {
@@ -322,7 +424,7 @@
         "h": 17,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 44
       },
       "id": 2,
       "options": {
@@ -414,7 +516,7 @@
         "h": 17,
         "w": 12,
         "x": 12,
-        "y": 27
+        "y": 44
       },
       "id": 1,
       "options": {
@@ -458,6 +560,6 @@
   "timezone": "",
   "title": "Ailen Dashboard",
   "uid": "bf9011e8-f3df-44f7-94cf-b34dda4e0418",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }

@@ -29,61 +29,61 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=alien123
 
 
-  # ####################################
-  # ########## MediaMTX Module #########
-  # ####################################
-  # emulator-module:
-  #   image: mediamtx-env-1:latest
-  #   ports:
-  #     - 8554:8554/tcp
-  #   environment:
-  #     - rtsp-live-stream-1=live-1
-  #     - rtsp-live-stream-2=live-2
-  #     - rtsp-live-stream-3=live-3
-  #     - rtsp-sample-MOT1608raw.mp4=sample-1
-  #     - rtsp-sample-MOT1602raw.mp4=sample-2
+  ####################################
+  ########## MediaMTX Module #########
+  ####################################
+  emulator-module:
+    image: mediamtx-env-1:latest
+    ports:
+      - 8554:8554/tcp
+    environment:
+      - rtsp-live-stream-1=live-1
+      - rtsp-live-stream-2=live-2
+      - rtsp-live-stream-3=live-3
+      - rtsp-sample-MOT1608raw.mp4=sample-1
+      - rtsp-sample-MOT1602raw.mp4=sample-2
       
-  # ####################################
-  # ########### Python Module ##########
-  # ####################################
-  # python-module-1:
-  #   image: ai-stack-lite-run-1:latest
-  #   ports:
-  #     - 8001:5000/tcp
-  #   environment:
-  #     - RUN_TYPE=python
-  #     - RUN_SCRIPT_PATH=apps/python/gpu-live-inference-keypoint.py
-  #     - MODEL_PATH=yolov8n-pose.pt
-  #     - VISUALIZATION=0
-  #     - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
-  #     - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
-  #   # Deploy on GPU
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             count: 1
-  #             capabilities: [gpu]
-  # python-module-2:
-  #   image: ai-stack-lite-run-1:latest
-  #   ports:
-  #     - 8002:5000/tcp
-  #   environment:
-  #     - RUN_TYPE=python
-  #     - RUN_SCRIPT_PATH=apps/python/gpu-live-inference-keypoint.py
-  #     - MODEL_PATH=yolov8n-pose.pt
-  #     - VISUALIZATION=1
-  #     - RTSP_INPUT=rtsp://emulator-module:8554/sample-2
-  #     - RTSP_OUTPUT=rtsp://emulator-module:8554/live-2
-  #   # Deploy on GPU
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             count: 1
-  #             capabilities: [gpu]
+  ####################################
+  ########### Python Module ##########
+  ####################################
+  python-module-1:
+    image: ai-stack-lite-run-1:latest
+    ports:
+      - 8001:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/gpu-live-inference-keypoint.py
+      - MODEL_PATH=yolov8n-pose.pt
+      - VISUALIZATION=0
+      - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
+      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
+    # Deploy on GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  python-module-2:
+    image: ai-stack-lite-run-1:latest
+    ports:
+      - 8002:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/gpu-live-inference-keypoint.py
+      - MODEL_PATH=yolov8n-pose.pt
+      - VISUALIZATION=1
+      - RTSP_INPUT=rtsp://emulator-module:8554/sample-2
+      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-2
+    # Deploy on GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
   python-module-3:
     image: ai-stack-lite-run-1:latest
     ports:
@@ -91,7 +91,7 @@ services:
     environment:
       - RUN_TYPE=python
       - RUN_SCRIPT_PATH=apps/python/cpu-data-generator.py
-      - INFLUX_DB_URL=http://0.0.0.0:8086
+      - INFLUX_DB_URL=http://influxdb:8086
       - INFLUX_DB_USERNAME=admin
       - INFLUX_DB_PASSWORD=admin123
       - INFLUX_DB_ORG=ai-playground
@@ -102,43 +102,43 @@ services:
   ########## Node Exporter ###########
   ####################################
 
-  # # Expose Host Machine Hardware Metrics 
-  # node-exporter:
-  #   image: prom/node-exporter
-  #   volumes:
-  #     - /proc:/host/proc:ro
-  #     - /sys:/host/sys:ro
-  #     - /:/rootfs:ro
-  #   command:
-  #     - "--path.procfs=/host/proc"
-  #     - "--path.sysfs=/host/sys"
-  #     - --collector.filesystem.ignored-mount-points
-  #     - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-  #   ports:
-  #     - 9100:9100
-  #   restart: always
-  #   deploy:
-  #     mode: global
+  # Expose Host Machine Hardware Metrics 
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    ports:
+      - 9100:9100
+    restart: always
+    deploy:
+      mode: global
 
-  # # Log Scrapper - a system to collect and process metrics, not an event logging system
-  # prometheus:
-  #   image: prom/prometheus
-  #   restart: always
-  #   volumes:
-  #     - ./prometheus:/etc/prometheus/
-  #     - prometheus_data:/prometheus
-  #   command:
-  #     - "--config.file=/etc/prometheus/prometheus.yml"
-  #     - "--storage.tsdb.path=/prometheus"
-  #     - "--web.console.libraries=/usr/share/prometheus/console_libraries"
-  #     - "--web.console.templates=/usr/share/prometheus/consoles"
-  #   ports:
-  #     - 9090:9090
-  #   links:
-  #     - cadvisor:cadvisor
-  #     - alertmanager:alertmanager
-  #   depends_on:
-  #     - cadvisor
+  # Log Scrapper - a system to collect and process metrics, not an event logging system
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    ports:
+      - 9090:9090
+    links:
+      - cadvisor:cadvisor
+      - alertmanager:alertmanager
+    depends_on:
+      - cadvisor
 
   # # Dashboard
   grafana:
@@ -157,33 +157,33 @@ services:
   #   depends_on:
   #     - prometheus
 
-  # # Container Advisor, is an open-source tool developed by Google to monitor containers
-  # cadvisor:
-  #   image: gcr.io/cadvisor/cadvisor
-  #   volumes:
-  #     - /:/rootfs:ro
-  #     - /var/run:/var/run:rw
-  #     - /sys:/sys:ro
-  #     - /var/lib/docker/:/var/lib/docker:ro
-  #   ports:
-  #     - 8080:8080
-  #   restart: always
-  #   deploy:
-  #     mode: global
-  # # cAdvisor depends on Reddis
-  # redis: 
-  #   image: redis:latest 
-  #   container_name: redis 
-  #   ports: 
-  #     - 6379:6379 
+  # Container Advisor, is an open-source tool developed by Google to monitor containers
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 8080:8080
+    restart: always
+    deploy:
+      mode: global
+  # cAdvisor depends on Reddis
+  redis: 
+    image: redis:latest 
+    container_name: redis 
+    ports: 
+      - 6379:6379 
 
-  # alertmanager:
-  #   image: prom/alertmanager
-  #   restart: always
-  #   ports:
-  #     - 9093:9093
-  #   volumes:
-  #     - ./alertmanager/:/etc/alertmanager/
-  #   command:
-  #     - "--config.file=/etc/alertmanager/config.yml"
-  #     - "--storage.path=/alertmanager"
+  alertmanager:
+    image: prom/alertmanager
+    restart: always
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    command:
+      - "--config.file=/etc/alertmanager/config.yml"
+      - "--storage.path=/alertmanager"

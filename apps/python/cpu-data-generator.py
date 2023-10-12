@@ -25,6 +25,27 @@ INFLUX_DB_ORG = os.environ['INFLUX_DB_ORG']
 MEASUREMENT_NAME = os.environ['MEASUREMENT_NAME']
 BUCKET_NAME = os.environ['BUCKET_NAME']
 
+# Miscellanous
+alien_types = [
+    "Water",
+    "Fire",
+    "Grass",
+    "Electric",
+    "Psychic",
+    "Dark",
+    "Bug",
+    "Rock",
+    "Ghost",
+    "Fairy",
+    "Ice",
+    "Dragon",
+    "Fighting",
+    "Steel",
+    "Ground",
+    "Poison",
+    "Flying",
+    "Normal"
+]
 
 # SAMPLE
 # python-module-3:
@@ -72,7 +93,14 @@ if __name__ == "__main__":
                     "human_count", random.randint(0, 20)
                 ).field(
                     "alien_count", random.randint(0, 5)
+                ).field(
+                    "sunlight", bool(random.getrandbits(1))
+                ).field(
+                    "lightray_size", round(random.uniform(0, 30), 2)
+                ).field(
+                    "alien_type", random.choice(alien_types)
                 )
+                
             write_api.write(bucket=BUCKET_NAME, org=INFLUX_DB_ORG, record=data_point)
         print(f"Inserted {count} records")
         time.sleep(1)

@@ -138,7 +138,7 @@ Raw Video             |  Inferenced Video
 
 Output Grafana Visualization:
 
-TBA
+![Sample Grafana Visualization](./markdown-images/sample-visualization.png)
 
 ## Monitoring
 

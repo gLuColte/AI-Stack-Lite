@@ -22,19 +22,19 @@ banner()
 figlet -t "AI Stack Lite"
 
 #####################################
-########### Execute Scripts #########
+######## Envrionment Variables ######
 #####################################
-# Run Scriptj
-banner "Starting Scripts"
+# Variables
+banner "Envrionment Variables"
 # Change Work Dir to Apps
 cd /workspace/ai-stack-lite
-echo "Current working Directory:" $(pwd)
-echo "RUN_SCRIPT_PATH:" $RUN_SCRIPT_PATH
-echo "MODEL_PATH:" $MODEL_PATH
-echo "VISUALIZATION:" $VISUALIZATION
-echo "RTSP_INPUT:" $RTSP_INPUT
-echo "RTSP_OUTPUT:" $RTSP_OUTPUT
+printenv
 
+#####################################
+########### Execute Scripts #########
+#####################################
+# Run Script
+banner "Execute Script"
 # Run Scripts
 python3 $RUN_SCRIPT_PATH
 

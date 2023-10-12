@@ -30,7 +30,7 @@
         "x": 0,
         "y": 0
       },
-      "id": 8,
+      "id": 7,
       "panels": [],
       "title": "Summary",
       "type": "row"
@@ -38,7 +38,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+        "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
       },
       "fieldConfig": {
         "defaults": {
@@ -94,7 +94,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 16,
         "w": 24,
         "x": 0,
         "y": 1
@@ -116,7 +116,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+            "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
           },
           "query": "from(bucket: \"alien-observatory\")\r\n\t|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")",
           "refId": "A"
@@ -126,9 +126,22 @@
       "type": "timeseries"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 6,
+      "panels": [],
+      "title": "Details",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "influxdb",
-        "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+        "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
       },
       "fieldConfig": {
         "defaults": {
@@ -165,9 +178,9 @@
       },
       "gridPos": {
         "h": 15,
-        "w": 13,
+        "w": 12,
         "x": 0,
-        "y": 12
+        "y": 18
       },
       "id": 5,
       "options": {
@@ -190,7 +203,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+            "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
           },
           "query": "from(bucket: \"alien-observatory\")\r\n\t|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"sunlight\")",
           "refId": "A"
@@ -202,7 +215,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+        "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
       },
       "fieldConfig": {
         "defaults": {
@@ -228,11 +241,11 @@
       },
       "gridPos": {
         "h": 15,
-        "w": 11,
-        "x": 13,
-        "y": 12
+        "w": 12,
+        "x": 12,
+        "y": 18
       },
-      "id": 6,
+      "id": 9,
       "options": {
         "orientation": "auto",
         "reduceOptions": {
@@ -250,13 +263,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+            "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
           },
           "query": "from(bucket: \"alien-observatory\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"sunlight\")\r\n  |> aggregateWindow(\r\n        every: 1h,\r\n        fn: (column, tables=<-) => tables |> reduce(\r\n            identity: {true_count: 0.0},\r\n            fn: (r, accumulator) => ({\r\n                true_count:\r\n                    if r._value == true then accumulator.true_count + 1.0\r\n                    else accumulator.true_count + 0.0\r\n            })\r\n        )\r\n    )",
           "refId": "A"
         }
       ],
-      "title": "Count of True Sunlights",
+      "title": "Sunlight",
       "type": "gauge"
     },
     {
@@ -265,7 +278,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 33
       },
       "id": 3,
       "panels": [],
@@ -275,7 +288,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+        "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
       },
       "fieldConfig": {
         "defaults": {
@@ -320,12 +333,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 16,
+        "h": 21,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 34
       },
-      "id": 7,
+      "id": 8,
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
@@ -334,7 +347,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "orientation": "auto",
@@ -352,19 +365,19 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+            "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
           },
-          "query": "from(bucket: \"alien-observatory\")\r\n    |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n    |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n    |> filter(fn: (r) => r[\"_field\"] == \"alien_type\")\r\n\r\n    |> duplicate(column: \"_value\", as: \"alien_type\")\r\n    |> group(columns: [\"alien_type\"])\r\n    |> count()\r\n    |> group()",
+          "query": "from(bucket: \"alien-observatory\")\r\n\t|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"alien_type\")\r\n  |> duplicate(column: \"_value\", as: \"alien_type\")\r\n  |> group(columns: [\"alien_type\"])\r\n  |> count()\r\n  |> group()",
           "refId": "A"
         }
       ],
-      "title": "Alien Type Count (ALL Sectors)",
+      "title": "Count of Alien Types",
       "type": "barchart"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+        "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
       },
       "fieldConfig": {
         "defaults": {
@@ -424,7 +437,7 @@
         "h": 17,
         "w": 12,
         "x": 0,
-        "y": 44
+        "y": 55
       },
       "id": 2,
       "options": {
@@ -443,7 +456,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+            "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
           },
           "query": "from(bucket: \"alien-observatory\")\r\n\t|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"human_count\")",
           "refId": "A"
@@ -455,7 +468,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+        "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
       },
       "description": "Count of Aliens observed",
       "fieldConfig": {
@@ -516,7 +529,7 @@
         "h": 17,
         "w": 12,
         "x": 12,
-        "y": 44
+        "y": 55
       },
       "id": 1,
       "options": {
@@ -535,13 +548,13 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "e8c8dd9e-1e15-499c-b188-21c6d3c8fd75"
+            "uid": "f8bfeb85-e3d3-45e8-a105-32bfe8bb2e31"
           },
           "query": "from(bucket: \"alien-observatory\")\r\n\t|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"census\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"alien_count\")",
           "refId": "A"
         }
       ],
-      "title": "Ailen Count",
+      "title": "Alien Count",
       "type": "timeseries"
     }
   ],
@@ -558,8 +571,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Ailen Dashboard",
+  "title": "Alien Dashboard",
   "uid": "bf9011e8-f3df-44f7-94cf-b34dda4e0418",
-  "version": 5,
+  "version": 3,
   "weekStart": ""
 }

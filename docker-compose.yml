@@ -17,9 +17,9 @@ services:
     restart: unless-stopped
     ports:
       - "8086:8086"
-    # volumes:
-    #   - /infludb/config:/etc/influxdb2
-    #   - /infludb/db:/var/lib/influxdb2
+    volumes:
+      - /infludb/config:/etc/influxdb2
+      - /infludb/db:/var/lib/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=admin

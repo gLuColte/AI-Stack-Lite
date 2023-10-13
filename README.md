@@ -147,9 +147,15 @@ Raw Video             |  Inferenced Video
 :--------------------:|:--------------------:
 ![Raw Video](/markdown-images/MOT1602raw.gif)  |  ![Inferenced Video](/markdown-images/yolov8n-poseMOT1602raw.gif)
 
-Output Grafana Visualization:
+Output Grafana Visualization (Dummy Data):
 
 ![Sample Grafana Visualization](./markdown-images/sample-visualization.png)
+
+### Live Traffic
+
+As an interesting experiment, let's use a public live camera stream from Sydney:
+- [Sydney Harbor Bridge Live Stream Link](http://220.233.144.165:8888/mjpg/video.mjpg)
+
 
 ## Monitoring
 
@@ -174,3 +180,4 @@ Following the links:
 - [Enhancing AI Development with Mojo: Code Examples and Best Practices](https://artificialcorner.com/enhancing-ai-development-with-mojo-code-examples-and-best-practices-6341c3e66e15)
 - [Get started with Mojo🔥](https://docs.modular.com/mojo/manual/get-started/index.html)
 - [How to install Mojo🔥locally using Docker](https://medium.com/@1ce.mironov/how-to-install-mojo-locally-using-docker-5346bc23a9fe)
+- [Object-tracking-and-counting-using-YOLOV8](https://github.com/mohamedamine99/Object-tracking-and-counting-using-YOLOV8)

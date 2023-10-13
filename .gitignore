@@ -10,4 +10,4 @@ build/build.env
 *.pptx
 
 # Others
-.vscode
+**/.vscode

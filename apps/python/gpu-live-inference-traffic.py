@@ -54,15 +54,11 @@ if __name__ == "__main__":
             print("Failed to grab")
             time.sleep(1)
             continue
-        results = model(img, stream=True)
-        if visualization:
-            # coordinates
-            for r in results:
-                img = r.plot()
-                
-                
-                
-        ffmpeg_process.stdin.write(img.astype(np.uint8).tobytes())
+        batch_results = model.track([img], persist=True, conf=0.3, iou=0.5)        
+        for index, image_result in enumerate(batch_results):
+            operating_img = img
+            operating_img = image_result.plot()
+            ffmpeg_process.stdin.write(operating_img.astype(np.uint8).tobytes())
         
     capture.release()
     ffmpeg_process.stdin.close()

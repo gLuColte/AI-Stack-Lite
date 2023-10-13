@@ -28,7 +28,7 @@ def inference_draw(input_batch, video_writer):
     batch_results = model.track(input_batch, persist=True,conf=0.3, iou=0.5)
     # coordinates
     for index, image_result in enumerate(batch_results):
-        operating_img = batch[index]
+        operating_img = input_batch[index]
         operating_img = image_result.plot()
         video_writer.write(operating_img)
 

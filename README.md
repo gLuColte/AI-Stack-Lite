@@ -114,7 +114,7 @@ Using Docker-Compose:
 docker-compose -f docker-compose.yml up
 ```
 
-### Execution - Kubernetes (! Issues: After Kubectl installation, WIFI is removed on Host)
+### Execution - Kubernetes ( :exclamation: Issues: After Kubectl installation, WIFI is removed on Host)
 
 Ensure to have [minikube](https://minikube.sigs.k8s.io/docs/start/) installed:
 

@@ -61,6 +61,8 @@ This repository presents our proposed architecture designed to streamline monito
 - [ ] Mojo vs Python Test
 - [ ] Kubernetes Setup
 - [ ] Alert Manager Setup
+- [ ] Live Dashboard Update
+- [ ] Grafana Live Streams (RTSP)
 - [ ] Cloud Deployment - Integration with Azure and AWS
 - [ ] ReadMe Documentation - Grafana/Influx/cAdvisor/NodeExporter/AlertManager
 
@@ -181,3 +183,5 @@ Following the links:
 - [Get started with Mojo🔥](https://docs.modular.com/mojo/manual/get-started/index.html)
 - [How to install Mojo🔥locally using Docker](https://medium.com/@1ce.mironov/how-to-install-mojo-locally-using-docker-5346bc23a9fe)
 - [Object-tracking-and-counting-using-YOLOV8](https://github.com/mohamedamine99/Object-tracking-and-counting-using-YOLOV8)
+- [grafana-livecamera-rtsp-webrtc](https://github.com/cxnturi0n/grafana-livecamera-rtsp-webrtc/tree/main)
+- [go2rtc](https://github.com/AlexxIT/go2rtc)

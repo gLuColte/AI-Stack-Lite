@@ -28,7 +28,6 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=alien-observatory
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=alien123
 
-
   ####################################
   ########## MediaMTX Module #########
   ####################################
@@ -43,6 +42,17 @@ services:
       - rtsp-sample-MOT1608raw.mp4=sample-1
       - rtsp-sample-MOT1602raw.mp4=sample-2
       
+  ####################################
+  ########### go2rtc Module ##########
+  ####################################
+  # go2rtc-module:
+  #   image: alexxit/go2rtc
+  #   container_name: go2rtc
+  #   ports:
+  #     - 1984:1984/tcp
+  #   volumes:
+  #     - ./go2rtc:/config
+  
   ####################################
   ########### Python Module ##########
   ####################################
@@ -140,6 +150,10 @@ services:
     deploy:
       mode: global
 
+  ####################################
+  ############ Prometheus ############
+  ####################################
+
   # Log Scrapper - a system to collect and process metrics, not an event logging system
   prometheus:
     image: prom/prometheus
@@ -160,6 +174,10 @@ services:
     depends_on:
       - cadvisor
 
+  ####################################
+  ############# Grafana ##############
+  ####################################
+
   # # Dashboard
   grafana:
     image: grafana/grafana
@@ -176,6 +194,10 @@ services:
       - 3000:3000
   #   depends_on:
   #     - prometheus
+
+  ####################################
+  ############# cAdvisor #############
+  ####################################
 
   # Container Advisor, is an open-source tool developed by Google to monitor containers
   cadvisor:
@@ -196,6 +218,10 @@ services:
     container_name: redis 
     ports: 
       - 6379:6379 
+
+  ####################################
+  ############## Alert ###############
+  ####################################
 
   alertmanager:
     image: prom/alertmanager

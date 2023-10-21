@@ -1,0 +1,13 @@
+# https://github.com/AlexxIT/go2rtc#module-api for other configuration examples
+# Example
+streams:
+    sample-1:
+        - 'rtsp://emulator-module:8554/sample-1'
+    sample-2:
+        - 'rtsp://emulator-module:8554/sample-2'
+    sample-3:
+        - 'rtsp://emulator-module:8554/sample-3'
+    live-1:
+        - 'rtsp://localhost:8554/live-1'
+    live-2:
+        - 'rtsp://localhost:8554/live-2'

@@ -66,6 +66,12 @@ This repository presents our proposed architecture designed to streamline monito
 - [ ] Cloud Deployment - Integration with Azure and AWS
 - [ ] ReadMe Documentation - Grafana/Influx/cAdvisor/NodeExporter/AlertManager
 
+## Learning Goals
+- Docker
+- Grafana
+- Prometheus
+- Kubernetes
+
 ## Setup
 
 ### Base Image Building
@@ -185,3 +191,5 @@ Following the links:
 - [Object-tracking-and-counting-using-YOLOV8](https://github.com/mohamedamine99/Object-tracking-and-counting-using-YOLOV8)
 - [grafana-livecamera-rtsp-webrtc](https://github.com/cxnturi0n/grafana-livecamera-rtsp-webrtc/tree/main)
 - [go2rtc](https://github.com/AlexxIT/go2rtc)
+- [Yolo V8 - Vehicles Detecting \ Counting](https://www.kaggle.com/code/paulojunqueira/yolo-v8-vehicles-detecting-counting)
+- [Tracking and counting of object using YOLO v8](https://github.com/sankalpvarshney/Track-And-Count-Object-using-YOLO)

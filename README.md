@@ -169,7 +169,7 @@ Raw Video             |  Inferenced Video
 This builds on [Yolo V8 - Vehicles Detecting \ Counting](https://www.kaggle.com/code/paulojunqueira/yolo-v8-vehicles-detecting-counting), and uses multi threading to achieve live RTSP Streaming
 
 The Side by Side outcome is shown as following (Left Stream Emulator Video, Right Inference Video):
-![Traffic Counter](/markdown-images/sample-traffic-counter.gif)
+![Traffic Counter](/markdown-images/sample-traffic-count.gif)
 
 Visualization Dashboard is as following:
 - TBA

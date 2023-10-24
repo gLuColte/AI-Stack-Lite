@@ -1,6 +1,14 @@
 
 ![AI Stack Lige](/markdown-images/main-logo.png)
 
+[![CI][ci-img]][ci-url]
+[![Gitter chat][gitter-img]][gitter-url]
+[![Discord][discord-img]][discord-url]
+[![Coverage Status][coverage-img]][coverage-url]
+[![server pulls][docker-server-pulls-img]][docker-server-image-url]
+[![ui pulls][docker-ui-pulls-img]][docker-ui-image-url]
+[![DOI][doi-img]][doi-url]
+
 ## Background
 
 In the realm of artificial intelligence, the process of inference involves deploying trained models to make predictions on new data. As these inferences are made, especially in real-time scenarios, it becomes imperative to monitor the results for accuracy, anomalies, and performance. Monitoring in real-time ensures that the AI system is functioning optimally and provides actionable insights. Visualization complements monitoring by offering a graphical representation of the AI's performance metrics, making it easier for stakeholders to understand and act upon.

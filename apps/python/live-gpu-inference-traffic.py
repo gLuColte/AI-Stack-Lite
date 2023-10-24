@@ -6,6 +6,8 @@ import os
 import cv2
 import time
 import copy
+import uuid
+import base64
 import threading
 import subprocess
 import numpy as np
@@ -14,6 +16,7 @@ from ultralytics import YOLO
 import matplotlib.pyplot as plt
 from torchvision import transforms
 from collections import deque
+from datetime import datetime, timezone
 
 # QUEUE
 import queue
@@ -21,7 +24,10 @@ import queue
 ##########################################################
 ###################### Parameters ########################
 ##########################################################
-    
+
+# CAMERA LOCATION
+CAMERA_LOCATION = os.environ['CAMERA_LOCATION']
+
 # MODEL
 model_path=os.environ['MODEL_PATH']
 
@@ -32,7 +38,26 @@ input_rtsp_path=os.environ['RTSP_INPUT']
 output_rtsp_path=os.environ['RTSP_OUTPUT']
 
 # Frame Queue
-frame_queue = queue.Queue()
+frame_queue = queue.Queue(maxsize=500) # !: 500 is Arbitary
+
+# Message Queue
+message_queue = queue.Queue(maxsize=100)
+
+# Influx DB
+INFLUX_DB_URL = os.environ['INFLUX_DB_URL']
+INFLUX_DB_USERNAME = os.environ['INFLUX_DB_USERNAME']
+INFLUX_DB_PASSWORD = os.environ['INFLUX_DB_PASSWORD']
+INFLUX_DB_ORG = os.environ['INFLUX_DB_ORG']
+
+# Generator Commands
+MEASUREMENT_NAME = os.environ['MEASUREMENT_NAME']
+BUCKET_NAME = os.environ['BUCKET_NAME']
+
+# INTEREST_LINE_Y - Unscaled Raw Pixel Value
+INTEREST_LINE_Y = 1500 
+
+# SPLIT TRAFFIC LINE X - Unscaled RAW Pixel Value
+TRAFFIC_LINE_X = 2000
 
 # DEFAULT PARAMETERS
 DEFAULT_MAX_INPUT_FRAME_QUEUE_SECONDS = 10
@@ -52,7 +77,6 @@ DEFAULT_CIRCLE_RADIUS = 8
 DEFAULT_CIRCLE_THICKNESS = -1
 DEFAULT_TEXT_SIZE = 2
 DEFAULT_FONT_SCALE = 1
-
 
 ##########################################################
 ####################### Functions ########################
@@ -85,12 +109,6 @@ def open_ffmpeg_stream_process(stream_path):
            '-f', 'rtsp',
            #'-muxdelay', '0.1',
            stream_path]
-    
-    # args = (
-    #     "ffmpeg -re -f rawvideo -pix_fmt "
-    #     "rgb24 -s 1920x1080 -i pipe:0 -pix_fmt yuvj420p "
-    #     f"-f rtsp {stream_path}"
-    # ).split()
     return subprocess.Popen(args, stdin=subprocess.PIPE)
 
 
@@ -99,6 +117,9 @@ def open_ffmpeg_stream_process(stream_path):
 ##########################################################
 
 def receive_function():
+    
+    print("Start Camera_receive Thread")
+    
     cap = cv2.VideoCapture(input_rtsp_path)
     ret, frame = cap.read()
     frame_queue.put(frame)
@@ -108,12 +129,11 @@ def receive_function():
         
 def stream_function():     
     
+    print("Start Stream Thread")
+    
     ###############################################
     ############### Algorithm Setup ###############
     ###############################################
-    
-    # Initialize Model
-    model = YOLO(model_path)
 
     # Detect Classes Names
     classes_names = model.model.names
@@ -123,12 +143,12 @@ def stream_function():
     
     # Area of Interests
     # Y - Represents Up and down
-    interest_line_y = int(1500 * DEFAULT_SCALE_PERCENT/100) # !: Scaled based on Frame
+    interest_line_y = int(INTEREST_LINE_Y * DEFAULT_SCALE_PERCENT/100) # !: Scaled based on Frame
     # X - Represents the Lane on Left and Right 
-    interest_line_x = int(2000 * DEFAULT_SCALE_PERCENT/100) # !: Scaled based on Frame
+    traffic_line_x = int(TRAFFIC_LINE_X * DEFAULT_SCALE_PERCENT/100) # !: Scaled based on Frame
     
     # Offset - Gives a "THICKEN" Line offset 
-    offset = int(8 * DEFAULT_SCALE_PERCENT/100 )
+    offset = int(5 * DEFAULT_SCALE_PERCENT/100 )
     
     # TOTAL Traffic Counter
     counter_in = 0
@@ -178,7 +198,7 @@ def stream_function():
             cv2.line(
                 operating_frame, 
                 (0, interest_line_y), # NOTE: this is Point, we want to draw a line, hence X = 0
-                (int(4500 * DEFAULT_SCALE_PERCENT/100 ), interest_line_y), # NOTE: this is Point, we want to draw a line, hence X = W/E size you scaled
+                (width, interest_line_y), # NOTE: this is Point, we want to draw a line, hence X = W/E size you scaled
                 DEFAULT_INTEREST_COLOR_RGB,
                 DEFAULT_TEXT_SIZE
             )
@@ -224,12 +244,23 @@ def stream_function():
                 
                 # Checking if the center of recognized vehicle is in the area given by the (transition line + offset) and (transition line - offset )
                 if (center_y < (interest_line_y + offset)) and (center_y > (interest_line_y - offset)):
-                    if  (center_x >= 0) and (center_x <= interest_line_x):
+                    if  (center_x >= 0) and (center_x <= traffic_line_x):
                         counter_in +=1
                         counter_in_classes[class_ID] += 1
                     else:
                         counter_out += 1
                         counter_out_classes[class_ID] += 1
+                        
+                    # Message Sending
+                    message_queue.put(
+                        {
+                            "uuid": uuid.uuid4(),
+                            "label": class_name,
+                            "confidence": round(confidence, 2),
+                            "captured_timestamp": datetime.now(timezone.utc).isoformat(),
+                            "object_snippet": base64.b64encode(cv2.imencode('.jpg', frame[ymin:ymax, xmin:xmax])[1])
+                        }
+                    )
                         
                 ###############################################
                 ###############################################
@@ -249,7 +280,7 @@ def stream_function():
             cv2.putText(
                 img=operating_frame, 
                 text='N. Vehicles Out', 
-                org= (int(2800 * DEFAULT_SCALE_PERCENT/100 ), 30), # Coordinate of Text x,y
+                org= (1400, 30), # Coordinate of Text x,y
                 fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                 fontScale=DEFAULT_FONT_SCALE, 
                 color=DEFAULT_COLOR_RGB,
@@ -263,7 +294,7 @@ def stream_function():
                 # IN
                 cv2.putText(
                     img=operating_frame, 
-                    text= f"{_} : {counter_in_classes[_]}", 
+                    text= f"{classes_names[_]} : {counter_in_classes[_]}", 
                     org= (30,xt), 
                     fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                     fontScale=DEFAULT_FONT_SCALE, 
@@ -274,8 +305,8 @@ def stream_function():
                 # OUT
                 cv2.putText(
                     img=operating_frame, 
-                    text= f"{_} : {counter_out_classes[_]}", 
-                    org= (int(2800 * DEFAULT_SCALE_PERCENT/100 ),xt), 
+                    text= f"{classes_names[_]} : {counter_out_classes[_]}", 
+                    org= (1400,xt), 
                     fontFace=cv2.FONT_HERSHEY_TRIPLEX,
                     fontScale=DEFAULT_FONT_SCALE, 
                     color=DEFAULT_COLOR_RGB,
@@ -287,7 +318,7 @@ def stream_function():
             cv2.putText(
                 img=operating_frame, 
                 text=f'In:{counter_in}', 
-                org= (int(1820 * DEFAULT_SCALE_PERCENT/100 ),interest_line_y+60),
+                org= (910,interest_line_y+60),
                 fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                 fontScale=DEFAULT_FONT_SCALE*2, 
                 color=DEFAULT_INTEREST_COLOR_RGB,
@@ -296,7 +327,7 @@ def stream_function():
             cv2.putText(
                 img=operating_frame, 
                 text=f'Out:{counter_out}', 
-                org= (int(1800 * DEFAULT_SCALE_PERCENT/100 ),interest_line_y-40),
+                org= (900,interest_line_y-40),
                 fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                 fontScale=DEFAULT_FONT_SCALE*2, 
                 color=DEFAULT_INTEREST_COLOR_RGB,
@@ -307,6 +338,56 @@ def stream_function():
             ffmpeg_process.stdin.write(
                 operating_frame.astype(np.uint8).tobytes()
             )
+
+def message_function():
+    """
+    # Use default dictionary structure
+                dict_structure = {
+                    "measurement": "h2o_feet",
+                    "tags": {"location": "coyote_creek"},
+                    "fields": {"water_level": 1.0},
+                    "time": 1
+                }
+                point = Point.from_dict(dict_structure, WritePrecision.NS)
+    """
+    
+    print("Start Message Thread")
+    
+    # Initialize Influx DB
+    client = influxdb_client.InfluxDBClient(
+        url=INFLUX_DB_URL,
+        username=INFLUX_DB_USERNAME, 
+        password=INFLUX_DB_PASSWORD,
+        org=INFLUX_DB_ORG
+    )
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+    
+    message_counter = 1
+    while True:
+        if message_queue.empty() !=True:
+            # Get Frame
+            operating_message = message_queue.get()
+            
+            # Check
+            print(f"Retrieved Message:\n{operating_message}")
+            
+            # Creating Data Point
+            data_dict = {
+                "measurement": MEASUREMENT_NAME,
+                "tags": {
+                    "location": CAMERA_LOCATION
+                },
+                "fields": {k:v for k,v in operating_message.items()}
+            }
+            
+            # point
+            point = influxdb_client.Point(data_dict)
+            
+            # Write
+            write_api.write(bucket=BUCKET_NAME, org=INFLUX_DB_ORG, record=data_point)
+            print(f"Inserted {count} records")
+            message_counter+=1
+    
 
 ##########################################################
 ######################### Main ###########################
@@ -342,11 +423,14 @@ if __name__ == "__main__":
     ###############################################
     ############# Algorithm Execution #############
     ###############################################
+    
+    # Initialize Model - Trigger Download Before threads
+    model = YOLO(model_path)
 
     # Defining Threads
     receive_thread = threading.Thread(target=receive_function)
     stream_thread = threading.Thread(target=stream_function)
-    
+
     # Starting Threads
     receive_thread.start()
     stream_thread.start()

@@ -116,8 +116,15 @@ services:
       - RUN_TYPE=python
       - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic.py
       - MODEL_PATH=yolov8x.pt
+      - CAMERA_LOCATION=PeterHighWay
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-3
       - RTSP_OUTPUT=rtsp://emulator-module:8554/live-3
+      - INFLUX_DB_URL=http://influxdb:8086
+      - INFLUX_DB_USERNAME=admin
+      - INFLUX_DB_PASSWORD=admin123
+      - INFLUX_DB_ORG=ai-playground
+      - MEASUREMENT_NAME=census
+      - BUCKET_NAME=traffic-observatory
     # Deploy on GPU
     deploy:
       resources:

@@ -54,8 +54,8 @@ This repository presents our proposed architecture designed to streamline monito
 - [X] Live Inference Script Update - Fix Output stream Dimensions
 - [X] Influx DB setup
 - [X] Influx Python Local Inserter
-- [ ] Live Count Update
-- [ ] Live Inference Pictures with Data Insert
+- [X] Live Count Update
+- [X] Live Inference Pictures with Data Insert
 - [ ] GPU Device Monitoring
 - [ ] Live Inference Speed / Accuracies Monitoring
 - [ ] Mojo vs Python Test
@@ -163,12 +163,16 @@ Raw Video             |  Inferenced Video
 :--------------------:|:--------------------:
 ![Raw Video](/markdown-images/MOT1602raw.gif)  |  ![Inferenced Video](/markdown-images/yolov8n-poseMOT1602raw.gif)
 
+Visualization Dashboard is as following:
+- TBA
+
+
 
 ### Traffic - Vehicle Detection and Counter
 
 This builds on [Yolo V8 - Vehicles Detecting \ Counting](https://www.kaggle.com/code/paulojunqueira/yolo-v8-vehicles-detecting-counting), and uses multi threading to achieve live RTSP Streaming
 
-The Side by Side outcome is shown as following (Left Stream Emulator Video, Right Inference Video):
+The Side by Side outcome is shown as following (**Left Stream Emulator Video**, **Right Inference Video**):
 ![Traffic Counter](/markdown-images/sample-traffic-count.gif)
 
 Visualization Dashboard is as following:

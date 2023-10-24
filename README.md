@@ -139,9 +139,17 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 ```
 
-## AI Inference
+## Visualization and AI Inference
 
-The emulator module contains 5 main streams, 2 replays sample footage (MOT1608raw.mp4 and MOT1602raw.mp4) recursively, and 3 live stream path opening wait for publishing.
+The emulator module contains 5 main streams, 2 replays sample footage (MOT1608raw.mp4 and MOT1602raw.mp4) recursively, and 3 live stream path opening wait for publishing. This section mainly describes the visualization dashboard and AI Inference.
+
+### Dummy Data Visulization
+
+Output Grafana Visualization (Dummy Data):
+
+![Sample Grafana Visualization](./markdown-images/sample-visualization.png)
+
+### Pedestrian - Key Point Detection
 
 The python modules individually takes in the given $RTSP_INPUT and publish to $RTSP_OUTPUT based on given configurations:
 
@@ -155,9 +163,16 @@ Raw Video             |  Inferenced Video
 :--------------------:|:--------------------:
 ![Raw Video](/markdown-images/MOT1602raw.gif)  |  ![Inferenced Video](/markdown-images/yolov8n-poseMOT1602raw.gif)
 
-Output Grafana Visualization (Dummy Data):
 
-![Sample Grafana Visualization](./markdown-images/sample-visualization.png)
+### Traffic - Vehicle Detection and Counter
+
+This builds on [Yolo V8 - Vehicles Detecting \ Counting](https://www.kaggle.com/code/paulojunqueira/yolo-v8-vehicles-detecting-counting), and uses multi threading to achieve live RTSP Streaming
+
+The Side by Side outcome is shown as following (Left Stream Emulator Video, Right Inference Video):
+![Traffic Counter](/markdown-images/sample-traffic-counter.gif)
+
+Visualization Dashboard is as following:
+- TBA
 
 ### Live Traffic
 
@@ -194,3 +209,4 @@ Following the links:
 - [Yolo V8 - Vehicles Detecting \ Counting](https://www.kaggle.com/code/paulojunqueira/yolo-v8-vehicles-detecting-counting)
 - [Tracking and counting of object using YOLO v8](https://github.com/sankalpvarshney/Track-And-Count-Object-using-YOLO)
 - [Open CV RTSP camera buffer lag](https://stackoverflow.com/questions/60816436/open-cv-rtsp-camera-buffer-lag)
+- [opencv read error:[h264 @ 0x8f915e0] error while decoding MB 53 20, bytestream -7](https://stackoverflow.com/questions/49233433/opencv-read-errorh264-0x8f915e0-error-while-decoding-mb-53-20-bytestream)

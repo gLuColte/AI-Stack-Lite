@@ -10,4 +10,10 @@ build/build.env
 *.pptx
 
 # Others
-**/.vscode
+**/.vscode/
+
+# PT filws
+*.pt
+
+# Data Folder
+data/

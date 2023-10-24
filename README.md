@@ -193,3 +193,4 @@ Following the links:
 - [go2rtc](https://github.com/AlexxIT/go2rtc)
 - [Yolo V8 - Vehicles Detecting \ Counting](https://www.kaggle.com/code/paulojunqueira/yolo-v8-vehicles-detecting-counting)
 - [Tracking and counting of object using YOLO v8](https://github.com/sankalpvarshney/Track-And-Count-Object-using-YOLO)
+- [Open CV RTSP camera buffer lag](https://stackoverflow.com/questions/60816436/open-cv-rtsp-camera-buffer-lag)

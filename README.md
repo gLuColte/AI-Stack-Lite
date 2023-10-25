@@ -216,3 +216,4 @@ Following the links:
 - [Open CV RTSP camera buffer lag](https://stackoverflow.com/questions/60816436/open-cv-rtsp-camera-buffer-lag)
 - [opencv read error:[h264 @ 0x8f915e0] error while decoding MB 53 20, bytestream -7](https://stackoverflow.com/questions/49233433/opencv-read-errorh264-0x8f915e0-error-while-decoding-mb-53-20-bytestream)
 - [Object Detection using YOLOv5 OpenCV DNN in C++ and Python](https://learnopencv.com/object-detection-using-yolov5-and-opencv-dnn-in-c-and-python/)
+- [How to install OpenCV 4.5.2 with CUDA 11.2 and CUDNN 8.2 in Ubuntu 20.04](https://gist.github.com/raulqf/f42c718a658cddc16f9df07ecc627be7)

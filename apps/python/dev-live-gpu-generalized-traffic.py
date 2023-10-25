@@ -4,8 +4,11 @@
 
 import os
 import cv2
+import sys
 import time
 import copy
+import uuid
+import base64
 import threading
 import subprocess
 import numpy as np
@@ -14,6 +17,7 @@ from ultralytics import YOLO
 import matplotlib.pyplot as plt
 from torchvision import transforms
 from collections import deque
+from datetime import datetime, timezone
 
 # QUEUE
 import queue
@@ -21,7 +25,10 @@ import queue
 ##########################################################
 ###################### Parameters ########################
 ##########################################################
-    
+
+# CAMERA LOCATION
+CAMERA_LOCATION = os.environ['CAMERA_LOCATION']
+
 # MODEL
 model_path=os.environ['MODEL_PATH']
 
@@ -32,7 +39,13 @@ input_rtsp_path=os.environ['RTSP_INPUT']
 output_rtsp_path=os.environ['RTSP_OUTPUT']
 
 # Frame Queue
-frame_queue = queue.Queue()
+frame_queue = queue.Queue(maxsize=500) # !: 500 is Arbitary
+
+# INTEREST_LINE_Y - Unscaled Raw Pixel Value
+INTEREST_LINE_COORDINATES = (0, 1500) # ! One has to be zero
+
+# SPLIT TRAFFIC LINE X - Unscaled RAW Pixel Value
+TRAFFIC_LINE_COORDINATES = (2000, 0)
 
 # DEFAULT PARAMETERS
 DEFAULT_MAX_INPUT_FRAME_QUEUE_SECONDS = 10
@@ -52,7 +65,6 @@ DEFAULT_CIRCLE_RADIUS = 8
 DEFAULT_CIRCLE_THICKNESS = -1
 DEFAULT_TEXT_SIZE = 2
 DEFAULT_FONT_SCALE = 1
-
 
 ##########################################################
 ####################### Functions ########################
@@ -85,20 +97,102 @@ def open_ffmpeg_stream_process(stream_path):
            '-f', 'rtsp',
            #'-muxdelay', '0.1',
            stream_path]
-    
-    # args = (
-    #     "ffmpeg -re -f rawvideo -pix_fmt "
-    #     "rgb24 -s 1920x1080 -i pipe:0 -pix_fmt yuvj420p "
-    #     f"-f rtsp {stream_path}"
-    # ).split()
     return subprocess.Popen(args, stdin=subprocess.PIPE)
 
+##########################################################
+################## Counter Functions #####################
+##########################################################
+
+# ! Not Ideal Method
+def xx_counter_function(
+    center_coordinate, 
+    interest_coordainte, 
+    traffic_coordinate, 
+    input_class_ID,
+    input_counter_in, 
+    input_counter_in_classes,
+    input_counter_out, 
+    input_counter_out_classes
+    ):
+    if (center_coordinate[0] < (interest_coordainte[0] + offset)) and (center_coordinate[0] > (interest_coordainte[0] - offset)):
+        if  (center_coordinate[0] >= 0) and (center_coordinate[0] <= traffic_coordinate[0]):
+            input_counter_in +=1
+            input_counter_in_classes[input_class_ID] += 1
+        else:
+            input_counter_out += 1
+            input_counter_out_classes[input_class_ID] += 1
+    return input_counter_in, input_counter_in_classes, input_counter_out, input_counter_out_classes
+
+def xy_counter_function(
+    center_coordinate, 
+    interest_coordainte, 
+    traffic_coordinate, 
+    input_class_ID,
+    input_counter_in, 
+    input_counter_in_classes,
+    input_counter_out, 
+    input_counter_out_classes,
+    input_offset
+    ):
+    if (center_coordinate[0] < (interest_coordainte[0] + input_offset)) and (center_coordinate[0] > (interest_coordainte[0] - input_offset)):
+        if  (center_coordinate[1] >= 0) and (center_coordinate[1] <= traffic_coordinate[1]):
+            input_counter_in +=1
+            input_counter_in_classes[input_class_ID] += 1
+        else:
+            input_counter_out += 1
+            input_counter_out_classes[input_class_ID] += 1
+    return input_counter_in, input_counter_in_classes, input_counter_out, input_counter_out_classes
+
+
+def yy_counter_function(
+    center_coordinate, 
+    interest_coordainte, 
+    traffic_coordinate, 
+    input_class_ID,
+    input_counter_in, 
+    input_counter_in_classes,
+    input_counter_out, 
+    input_counter_out_classes,
+    input_offset
+    ):
+    if (center_coordinate[1] < (interest_coordainte[1] + input_offset)) and (center_coordinate[1] > (interest_coordainte[1] - input_offset)):
+        if  (center_coordinate[1] >= 0) and (center_coordinate[1] <= traffic_coordinate[1]):
+            input_counter_in +=1
+            input_counter_in_classes[input_class_ID] += 1
+        else:
+            input_counter_out += 1
+            input_counter_out_classes[input_class_ID] += 1
+    return input_counter_in, input_counter_in_classes, input_counter_out, input_counter_out_classes
+
+
+def yx_counter_function(
+    center_coordinate, 
+    interest_coordainte, 
+    traffic_coordinate, 
+    input_class_ID,
+    input_counter_in, 
+    input_counter_in_classes,
+    input_counter_out, 
+    input_counter_out_classes,
+    input_offset
+    ):
+    if (center_coordinate[1] < (interest_coordainte[1] + input_offset)) and (center_coordinate[1] > (interest_coordainte[1] - input_offset)):
+        if  (center_coordinate[0] >= 0) and (center_coordinate[0] <= traffic_coordinate[0]):
+            input_counter_in +=1
+            input_counter_in_classes[input_class_ID] += 1
+        else:
+            input_counter_out += 1
+            input_counter_out_classes[input_class_ID] += 1    
+    return input_counter_in, input_counter_in_classes, input_counter_out, input_counter_out_classes
 
 ##########################################################
 ################### Thread Functions #####################
 ##########################################################
 
 def receive_function():
+    
+    print("Start Camera_receive Thread")
+    
     cap = cv2.VideoCapture(input_rtsp_path)
     ret, frame = cap.read()
     frame_queue.put(frame)
@@ -108,26 +202,79 @@ def receive_function():
         
 def stream_function():     
     
+    print("Start Stream Thread")
+    
     ###############################################
     ############### Algorithm Setup ###############
     ###############################################
+
     # Initialize Model - Trigger Download Before threads
     model = YOLO(model_path)
-    
+
     # Detect Classes Names
     classes_names = model.model.names
     
     # Detect Classes IDs
     classes_IDs = [2, 3, 5, 7] 
     
-    # Area of Interests
-    # Y - Represents Up and down
-    interest_line_y = int(1500 * DEFAULT_SCALE_PERCENT/100) # !: Scaled based on Frame
-    # X - Represents the Lane on Left and Right 
-    interest_line_x = int(2000 * DEFAULT_SCALE_PERCENT/100) # !: Scaled based on Frame
+    ###############################################
+    ################# Lines Setup #################
+    ###############################################
+    
+    # Frame Reference
+    frame_size = [width, height]    
+    
+    # Function Indicator
+    function_indicator_list = [None, None]
+    
+    # LINE OF INTEREST
+    interest_line_coordinate_1 = [0, 0]
+    interest_line_coordinate_2 = frame_size
+    # TOTLA COORDINATES
+    total_in_coordinate = [0,0]
+    total_out_coordinate = [0,0]
+    
+    for index, coordinate in enumerate(INTEREST_LINE_COORDINATES):
+        if coordinate != 0:
+            interest_line_coordinate_1[index] = int(coordinate * DEFAULT_SCALE_PERCENT/100)
+            interest_line_coordinate_2[index] = int(coordinate * DEFAULT_SCALE_PERCENT/100)
+            function_indicator_list[0] = 'x' if index == 0 else 'y'
+            
+            # Total Coordinate
+            total_in_coordinate[index] = int(coordinate * DEFAULT_SCALE_PERCENT/100) + 60 if index == 1 else int(coordinate * DEFAULT_SCALE_PERCENT/100) + 120
+            total_out_coordinate[index] = int(coordinate * DEFAULT_SCALE_PERCENT/100) - 60 if index == 1 else int(coordinate * DEFAULT_SCALE_PERCENT/100) - 120
+            break
+    # Convert to tuple
+    interest_line_coordinate_1 = tuple(interest_line_coordinate_1)
+    interest_line_coordinate_2 = tuple(interest_line_coordinate_2)
+    total_in_coordinate = tuple(total_in_coordinate)
+    total_out_coordinate = tuple(total_out_coordinate)
+    
+    # TRAFFIC SPLITTER
+    traffic_line_coordinate_1 = [0, 0]
+    for index, coordinate in enumerate(TRAFFIC_LINE_COORDINATES):
+        if coordinate != 0:
+            traffic_line_coordinate_1[index] = int(coordinate * DEFAULT_SCALE_PERCENT/100)
+            function_indicator_list[1] = 'x' if index == 0 else 'y'
+            break
+    # Convert to tuple
+    traffic_line_coordinate_1 = tuple(traffic_line_coordinate_1)
+    
+    # Functions to call for counter
+    FUNCTION_INDICATOR = ''.join(function_indicator_list)
+    function_dictionary = {
+        'xx' : xx_counter_function,
+        'xy' : xy_counter_function,
+        'yy' : yy_counter_function,
+        'yx' : yx_counter_function    
+    }
+    
+    ###############################################
+    ###############################################
+    ###############################################
     
     # Offset - Gives a "THICKEN" Line offset 
-    offset = int(8 * DEFAULT_SCALE_PERCENT/100 )
+    offset = int(5 * DEFAULT_SCALE_PERCENT/100 )
     
     # TOTAL Traffic Counter
     counter_in = 0
@@ -176,8 +323,8 @@ def stream_function():
             # Drawing transition line for in\out vehicles counting 
             cv2.line(
                 operating_frame, 
-                (0, interest_line_y), # NOTE: this is Point, we want to draw a line, hence X = 0
-                (int(4500 * DEFAULT_SCALE_PERCENT/100 ), interest_line_y), # NOTE: this is Point, we want to draw a line, hence X = W/E size you scaled
+                interest_line_coordinate_1,
+                interest_line_coordinate_2,
                 DEFAULT_INTEREST_COLOR_RGB,
                 DEFAULT_TEXT_SIZE
             )
@@ -221,15 +368,22 @@ def stream_function():
                     thickness=DEFAULT_TEXT_SIZE
                 )
                 
-                # Checking if the center of recognized vehicle is in the area given by the (transition line + offset) and (transition line - offset )
-                if (center_y < (interest_line_y + offset)) and (center_y > (interest_line_y - offset)):
-                    if  (center_x >= 0) and (center_x <= interest_line_x):
-                        counter_in +=1
-                        counter_in_classes[class_ID] += 1
-                    else:
-                        counter_out += 1
-                        counter_out_classes[class_ID] += 1
-                        
+                ###############################################
+                #################### BLoC #####################
+                ###############################################
+                
+                counter_in, counter_in_classes, counter_out, counter_out_classes = function_dictionary[FUNCTION_INDICATOR](
+                        (center_x, center_y), 
+                        interest_line_coordinate_1, 
+                        traffic_line_coordinate_1, 
+                        class_ID,
+                        counter_in, 
+                        counter_in_classes,
+                        counter_out, 
+                        counter_out_classes,
+                        offset
+                )
+                    
                 ###############################################
                 ###############################################
                 ###############################################
@@ -248,7 +402,7 @@ def stream_function():
             cv2.putText(
                 img=operating_frame, 
                 text='N. Vehicles Out', 
-                org= (int(2800 * DEFAULT_SCALE_PERCENT/100 ), 30), # Coordinate of Text x,y
+                org= (1400, 30), # Coordinate of Text x,y
                 fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                 fontScale=DEFAULT_FONT_SCALE, 
                 color=DEFAULT_COLOR_RGB,
@@ -256,14 +410,14 @@ def stream_function():
             )
 
             # Writing the counting of type of vehicles in the corners of frame 
-            xt = 40
+            y_increment = 40
             for _ in classes_IDs:
-                xt +=30
+                y_increment +=30
                 # IN
                 cv2.putText(
                     img=operating_frame, 
                     text= f"{classes_names[_]} : {counter_in_classes[_]}", 
-                    org= (30,xt), 
+                    org= (30, y_increment), 
                     fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                     fontScale=DEFAULT_FONT_SCALE, 
                     color=DEFAULT_COLOR_RGB,
@@ -274,7 +428,7 @@ def stream_function():
                 cv2.putText(
                     img=operating_frame, 
                     text= f"{classes_names[_]} : {counter_out_classes[_]}", 
-                    org= (int(2800 * DEFAULT_SCALE_PERCENT/100 ),xt), 
+                    org= (1400, y_increment), 
                     fontFace=cv2.FONT_HERSHEY_TRIPLEX,
                     fontScale=DEFAULT_FONT_SCALE, 
                     color=DEFAULT_COLOR_RGB,
@@ -286,7 +440,7 @@ def stream_function():
             cv2.putText(
                 img=operating_frame, 
                 text=f'In:{counter_in}', 
-                org= (int(1820 * DEFAULT_SCALE_PERCENT/100 ),interest_line_y+60),
+                org= total_in_coordinate,
                 fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                 fontScale=DEFAULT_FONT_SCALE*2, 
                 color=DEFAULT_INTEREST_COLOR_RGB,
@@ -295,7 +449,7 @@ def stream_function():
             cv2.putText(
                 img=operating_frame, 
                 text=f'Out:{counter_out}', 
-                org= (int(1800 * DEFAULT_SCALE_PERCENT/100 ),interest_line_y-40),
+                org= total_out_coordinate,
                 fontFace=cv2.FONT_HERSHEY_TRIPLEX, 
                 fontScale=DEFAULT_FONT_SCALE*2, 
                 color=DEFAULT_INTEREST_COLOR_RGB,
@@ -305,12 +459,21 @@ def stream_function():
             # Publish To RTSP
             ffmpeg_process.stdin.write(
                 operating_frame.astype(np.uint8).tobytes()
-            )
+            )    
 
 ##########################################################
 ######################### Main ###########################
 ##########################################################
 if __name__ == "__main__":
+    ###############################################
+    ################ Sanity Checks ################
+    ###############################################
+    
+    if (INTEREST_LINE_COORDINATES[0] != 0) and (INTEREST_LINE_COORDINATES[1] != 0):
+        sys.exit('[ERROR]: Interest Line must be a LINE coordinate, meaning containing 1 zero.')
+    
+    if (TRAFFIC_LINE_COORDINATES[0] != 0) and (TRAFFIC_LINE_COORDINATES[1] != 0):
+        sys.exit('[ERROR]: Interest Line must be a LINE coordinate, meaning containing 1 zero.')
     
     ###############################################
     ############## Input Video Setup ##############
@@ -345,7 +508,8 @@ if __name__ == "__main__":
     # Defining Threads
     receive_thread = threading.Thread(target=receive_function)
     stream_thread = threading.Thread(target=stream_function)
-    
+
     # Starting Threads
     receive_thread.start()
     stream_thread.start()
+    

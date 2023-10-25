@@ -39,6 +39,7 @@ services:
       - rtsp-live-stream-1=live-1
       - rtsp-live-stream-2=live-2
       - rtsp-live-stream-3=live-3
+      - rtsp-live-stream-4=live-4
       - rtsp-sample-MOT1608raw.mp4=sample-1
       - rtsp-sample-MOT1602raw.mp4=sample-2
       - rtsp-sample-TrafficCountraw.mp4=sample-3
@@ -119,12 +120,6 @@ services:
       - CAMERA_LOCATION=PeterHighWay
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-3
       - RTSP_OUTPUT=rtsp://emulator-module:8554/live-3
-      - INFLUX_DB_URL=http://influxdb:8086
-      - INFLUX_DB_USERNAME=admin
-      - INFLUX_DB_PASSWORD=admin123
-      - INFLUX_DB_ORG=ai-playground
-      - MEASUREMENT_NAME=census
-      - BUCKET_NAME=traffic-observatory
     # Deploy on GPU
     deploy:
       resources:

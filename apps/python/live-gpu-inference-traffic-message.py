@@ -434,7 +434,9 @@ if __name__ == "__main__":
     # Defining Threads
     receive_thread = threading.Thread(target=receive_function)
     stream_thread = threading.Thread(target=stream_function)
+    message_thread = threading.Thread(target=message_function)
 
     # Starting Threads
     receive_thread.start()
     stream_thread.start()
+    message_thread.start()

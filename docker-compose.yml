@@ -115,7 +115,7 @@ services:
       - 8004:5000/tcp
     environment:
       - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic.py
+      - RUN_SCRIPT_PATH=apps/python/dev-live-gpu-inference-traffic-mp.py
       - MODEL_PATH=yolov8x.pt
       - CAMERA_LOCATION=PeterHighWay
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-3

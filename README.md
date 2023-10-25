@@ -54,8 +54,9 @@ This repository presents our proposed architecture designed to streamline monito
 - [X] Live Inference Script Update - Fix Output stream Dimensions
 - [X] Influx DB setup
 - [X] Influx Python Local Inserter
-- [X] Live Count Update
-- [X] Live Inference Pictures with Data Insert
+- [X] Live Count Update on Live RTSP
+- [ ] Live Inference Pictures with Data Insert
+- [ ] C++ Algorithm
 - [ ] GPU Device Monitoring
 - [ ] Live Inference Speed / Accuracies Monitoring
 - [ ] Mojo vs Python Test

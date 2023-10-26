@@ -103,8 +103,8 @@ services:
       - MODEL_PATH=yolov8x.pt
       - CAMERA_LOCATION=Bridge
       - RTSP_INPUT=http://220.233.144.165:8888/mjpg/video.mjpg
-      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-2
-      - CLASS_IDS=0,1,16
+      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-3
+      - CLASS_IDS=2,3,6,8
       - INTEREST_LINE_COORDINATES=400,0
       - TRAFFIC_LINE_COORDINATES=400,0
       - SCALE_PERCENT=100

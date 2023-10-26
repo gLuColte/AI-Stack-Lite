@@ -123,6 +123,31 @@ Using Docker-Compose:
 docker-compose -f docker-compose.yml up
 ```
 
+### YoloV8 Class Names
+
+Following is provided from [coco.names](https://github.com/pjreddie/darknet/blob/master/data/coco.names):
+
+```makefile
+0-4: person, bicycle, car, motorbike, aeroplane
+5-9: bus, train, truck, boat, traffic light
+10-14: fire hydrant, stop sign, parking meter, bench, bird
+15-19: cat, dog, horse, sheep, cow
+20-24: elephant, bear, zebra, giraffe, backpack
+25-29: umbrella, handbag, tie, suitcase, frisbee
+30-34: skis, snowboard, sports ball, kite, baseball bat
+35-39: baseball glove, skateboard, surfboard, tennis racket, bottle
+40-44: wine glass, cup, fork, knife, spoon
+45-49: bowl, banana, apple, sandwich, orange
+50-54: broccoli, carrot, hot dog, pizza, donut
+55-59: cake, chair, sofa, pottedplant, bed
+60-64: diningtable, toilet, tvmonitor, laptop, mouse
+65-69: remote, keyboard, cell phone, microwave, oven
+70-74: toaster, sink, refrigerator, book, clock
+75-79: vase, scissors, teddy bear, hair drier, toothbrush
+```
+
+Please use the right ID under "CLASS_IDS", order is displayed accordingly.
+
 #### Sample AI Module - Python
 
 Following shows an example configuration for a Python Module
@@ -279,8 +304,6 @@ Following the links:
 - [opencv read error:[h264 @ 0x8f915e0] error while decoding MB 53 20, bytestream -7](https://stackoverflow.com/questions/49233433/opencv-read-errorh264-0x8f915e0-error-while-decoding-mb-53-20-bytestream)
 - [Object Detection using YOLOv5 OpenCV DNN in C++ and Python](https://learnopencv.com/object-detection-using-yolov5-and-opencv-dnn-in-c-and-python/)
 - [How to install OpenCV 4.5.2 with CUDA 11.2 and CUDNN 8.2 in Ubuntu 20.04](https://gist.github.com/raulqf/f42c718a658cddc16f9df07ecc627be7)
-- [coco.names](https://github.com/pjreddie/darknet/blob/master/data/coco.names)
-
 
 
 

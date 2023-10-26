@@ -38,6 +38,7 @@ services:
     environment:
       - rtsp-live-stream-1=live-1
       - rtsp-live-stream-2=live-2     
+      - rtsp-live-stream-2=live-3     
       - rtsp-sample-TrafficCountraw2.mp4=sample-1      
       - rtsp-sample-MOT1608raw.mp4=sample-2
 
@@ -110,7 +111,7 @@ services:
       - SCALE_PERCENT=100
       - DEFAULT_LINE_SIZE=2
       - DEFAULT_FONT_SCALE=1
-      - DEFAULT_OFFSET=2
+      - DEFAULT_OFFSET=15
       - DEFAULT_GPU_DEVICE=1
     # Deploy on GPU
     deploy:

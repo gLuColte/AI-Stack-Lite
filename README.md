@@ -245,6 +245,20 @@ cAdvisor              |
 :--------------------:|
 ![cAdvisor](/markdown-images/cadvisor.png)
 
+## Performance Comparison
+
+Input Stream Specification:
+- Frame Size
+- FPS
+
+Metrics | Python | C++ | Modular
+:------:|:------:|:---:|:------:|
+RAM|
+CPU|
+GPU|
+
+
+
 ## Cloud Deployments
 
 TBD

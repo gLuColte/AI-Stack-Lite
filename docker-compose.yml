@@ -27,7 +27,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=ai-playground
       - DOCKER_INFLUXDB_INIT_BUCKET=alien-observatory
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=alien123
-
+      
   ####################################
   ########## MediaMTX Module #########
   ####################################
@@ -37,89 +37,31 @@ services:
       - 8554:8554/tcp
     environment:
       - rtsp-live-stream-1=live-1
-      - rtsp-live-stream-2=live-2
-      - rtsp-live-stream-3=live-3
-      - rtsp-live-stream-4=live-4
-      - rtsp-sample-MOT1608raw.mp4=sample-1
-      - rtsp-sample-MOT1602raw.mp4=sample-2
-      - rtsp-sample-TrafficCountraw.mp4=sample-3
-      
-  ####################################
-  ########### go2rtc Module ##########
-  ####################################
-  # go2rtc-module:
-  #   image: alexxit/go2rtc
-  #   container_name: go2rtc
-  #   ports:
-  #     - 1984:1984/tcp
-  #   volumes:
-  #     - ./go2rtc:/config
-  
+      - rtsp-live-stream-2=live-2     
+      - rtsp-sample-TrafficCountraw2.mp4=sample-1      
+      - rtsp-sample-MOT1608raw.mp4=sample-2
+
   ####################################
   ########### Python Module ##########
   ####################################
-  python-module-1:
-    image: ai-stack-lite-run-1:latest
-    ports:
-      - 8001:5000/tcp
-    environment:
-      - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference.py
-      - MODEL_PATH=yolov8n-pose.pt
-      - VISUALIZATION=0
-      - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
-      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
-    # Deploy on GPU
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
   python-module-2:
     image: ai-stack-lite-run-1:latest
     ports:
       - 8002:5000/tcp
     environment:
       - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference.py
-      - MODEL_PATH=yolov8n-pose.pt
-      - VISUALIZATION=1
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mp.py
+      - MODEL_PATH=yolov8x.pt
+      - CAMERA_LOCATION=Townhall
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-2
       - RTSP_OUTPUT=rtsp://emulator-module:8554/live-2
-    # Deploy on GPU
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-  python-module-3:
-    image: ai-stack-lite-run-1:latest
-    ports:
-      - 8003:5000/tcp
-    environment:
-      - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-cpu-data-generator.py
-      - INFLUX_DB_URL=http://influxdb:8086
-      - INFLUX_DB_USERNAME=admin
-      - INFLUX_DB_PASSWORD=admin123
-      - INFLUX_DB_ORG=ai-playground
-      - MEASUREMENT_NAME=census
-      - BUCKET_NAME=alien-observatory
-  python-module-4:
-    image: ai-stack-lite-run-1:latest
-    ports:
-      - 8004:5000/tcp
-    environment:
-      - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic.py
-      - MODEL_PATH=yolov8x.pt
-      - CAMERA_LOCATION=PeterHighWay
-      - RTSP_INPUT=rtsp://emulator-module:8554/sample-3
-      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-3
+      - CLASS_IDS=0,1,16
+      - INTEREST_LINE_COORDINATES=480,0
+      - TRAFFIC_LINE_COORDINATES=480,0
+      - SCALE_PERCENT=100
+      - DEFAULT_LINE_SIZE=2
+      - DEFAULT_FONT_SCALE=1
+      - DEFAULT_OFFSET=2
     # Deploy on GPU
     deploy:
       resources:
@@ -233,3 +175,11 @@ services:
     command:
       - "--config.file=/etc/alertmanager/config.yml"
       - "--storage.path=/alertmanager"
+
+
+
+
+    
+
+    
+

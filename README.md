@@ -123,6 +123,43 @@ Using Docker-Compose:
 docker-compose -f docker-compose.yml up
 ```
 
+#### Sample AI Module - Python
+
+Following shows an example configuration for a Python Module
+
+```docker-compose
+python-module-1:
+image: ai-stack-lite-run-1:latest
+ports:
+    - 8001:5000/tcp
+environment:
+    - RUN_TYPE=python
+    - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
+    - MODEL_PATH=yolov8x.pt
+    - CAMERA_LOCATION=Townhall
+    - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
+    - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
+    - CLASS_IDS=0,1,16,2,3,5,7
+    - INTEREST_LINE_COORDINATES=960,0
+    - TRAFFIC_LINE_COORDINATES=960,0
+    - SCALE_PERCENT=50
+    - DEFAULT_LINE_SIZE=2
+    - DEFAULT_FONT_SCALE=1
+    - DEFAULT_OFFSET=2
+# Deploy on GPU
+deploy:
+    resources:
+    reservations:
+        devices:
+        - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+```
+
+#### Sample AI Module - C++
+
+TBA
+
 ### Execution - Kubernetes ( :exclamation: Issues: After Kubectl installation, WIFI is removed on Host)
 
 Ensure to have [minikube](https://minikube.sigs.k8s.io/docs/start/) installed:
@@ -150,31 +187,39 @@ Output Grafana Visualization (Dummy Data):
 
 ![Sample Grafana Visualization](./markdown-images/sample-visualization.png)
 
-### Pedestrian - Key Point Detection
+### Traffic - Pedestrian and Vehicle Detection
 
-The python modules individually takes in the given $RTSP_INPUT and publish to $RTSP_OUTPUT based on given configurations:
-
-- $RUN_TYPE = Language to execute
-- $RUN_SCRIPT = Script to execute
-- $MODEL_PATH = Model to be used
-- $VISUALIZATION = Boolean
-
-As an example, you will see a similar input and output to the following:
-Raw Video             |  Inferenced Video
-:--------------------:|:--------------------:
-![Raw Video](/markdown-images/MOT1602raw.gif)  |  ![Inferenced Video](/markdown-images/yolov8n-poseMOT1602raw.gif)
+The Side by Side outcome is shown as following (**Left Stream Emulator Video**, **Right Inference Video**):
+![Pedestrian Traffic Counter](/markdown-images/sample-pedestrian-traffic-count.gif)
 
 Visualization Dashboard is as following:
 - TBA
 
 
-
-### Traffic - Vehicle Detection and Counter
-
-This builds on [Yolo V8 - Vehicles Detecting \ Counting](https://www.kaggle.com/code/paulojunqueira/yolo-v8-vehicles-detecting-counting), and uses multi threading to achieve live RTSP Streaming
+### Traffic - Vehicle Detection
 
 The Side by Side outcome is shown as following (**Left Stream Emulator Video**, **Right Inference Video**):
 ![Traffic Counter](/markdown-images/sample-traffic-count.gif)
+
+Visualization Dashboard is as following:
+- TBA
+
+### Pedestrian - Person Detection
+
+The Side by Side outcome is shown as following (**Left Stream Emulator Video**, **Right Inference Video**):
+![Pedestrian Traffic Counter](/markdown-images/pedestrian-count.gif)
+
+Visualization Dashboard is as following:
+- TBA
+
+### Pedestrian - Key Point Detection
+
+The python modules individually takes in the given $RTSP_INPUT and publish to $RTSP_OUTPUT based on given configurations:
+
+As an example, you will see a similar input and output to the following:
+Raw Video             |  Inferenced Video
+:--------------------:|:--------------------:
+![Raw Video](/markdown-images/MOT1602raw.gif)  |  ![Inferenced Video](/markdown-images/yolov8n-poseMOT1602raw.gif)
 
 Visualization Dashboard is as following:
 - TBA
@@ -222,31 +267,3 @@ Following the links:
 
 
 
-```
-  python-module-2:
-    image: ai-stack-lite-run-1:latest
-    ports:
-      - 8002:5000/tcp
-    environment:
-      - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
-      - MODEL_PATH=yolov8x.pt
-      - CAMERA_LOCATION=Townhall
-      - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
-      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
-      - CLASS_IDS=0,1,16,2,3,5,7
-      - INTEREST_LINE_COORDINATES=960,0
-      - TRAFFIC_LINE_COORDINATES=960,0
-      - SCALE_PERCENT=50
-      - DEFAULT_LINE_SIZE=2
-      - DEFAULT_FONT_SCALE=1
-      - DEFAULT_OFFSET=2
-    # Deploy on GPU
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-    ```

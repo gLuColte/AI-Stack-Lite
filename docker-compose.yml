@@ -44,13 +44,36 @@ services:
   ####################################
   ########### Python Module ##########
   ####################################
+  python-module-1:
+    image: ai-stack-lite-run-1:latest
+    ports:
+      - 8001:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
+      - MODEL_PATH=yolov8x.pt
+      - CAMERA_LOCATION=Townhall
+      - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
+      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
+      - CLASS_IDS=2,3,5,7
+      - INTEREST_LINE_COORDINATES=0,1500
+      - TRAFFIC_LINE_COORDINATES=2000,0
+      - SCALE_PERCENT=50
+    # Deploy on GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
   python-module-2:
     image: ai-stack-lite-run-1:latest
     ports:
       - 8002:5000/tcp
     environment:
       - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mp.py
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
       - MODEL_PATH=yolov8x.pt
       - CAMERA_LOCATION=Townhall
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-2
@@ -69,6 +92,33 @@ services:
           devices:
             - driver: nvidia
               count: 1
+              capabilities: [gpu]
+  python-module-3:
+    image: ai-stack-lite-run-1:latest
+    ports:
+      - 8003:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
+      - MODEL_PATH=yolov8x.pt
+      - CAMERA_LOCATION=Bridge
+      - RTSP_INPUT=http://220.233.144.165:8888/mjpg/video.mjpg
+      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-2
+      - CLASS_IDS=0,1,16
+      - INTEREST_LINE_COORDINATES=400,0
+      - TRAFFIC_LINE_COORDINATES=400,0
+      - SCALE_PERCENT=100
+      - DEFAULT_LINE_SIZE=2
+      - DEFAULT_FONT_SCALE=1
+      - DEFAULT_OFFSET=2
+      - DEFAULT_GPU_DEVICE=1
+    # Deploy on GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 2
               capabilities: [gpu]
   ####################################
   ########## Node Exporter ###########

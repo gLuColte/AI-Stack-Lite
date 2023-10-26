@@ -282,7 +282,6 @@ def post_processing_function(input_queue, input_json):
     interest_line_coordinate_1 = tuple(interest_line_coordinate_1)
     interest_line_coordinate_2 = tuple(interest_line_coordinate_2)
 
-    
     # TRAFFIC SPLITTER
     traffic_line_coordinate_1 = [0, 0]
     for index, coordinate in enumerate(traffic_line_coordinates):

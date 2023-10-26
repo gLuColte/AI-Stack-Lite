@@ -218,3 +218,35 @@ Following the links:
 - [Object Detection using YOLOv5 OpenCV DNN in C++ and Python](https://learnopencv.com/object-detection-using-yolov5-and-opencv-dnn-in-c-and-python/)
 - [How to install OpenCV 4.5.2 with CUDA 11.2 and CUDNN 8.2 in Ubuntu 20.04](https://gist.github.com/raulqf/f42c718a658cddc16f9df07ecc627be7)
 - [coco.names](https://github.com/pjreddie/darknet/blob/master/data/coco.names)
+
+
+
+
+```
+  python-module-2:
+    image: ai-stack-lite-run-1:latest
+    ports:
+      - 8002:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
+      - MODEL_PATH=yolov8x.pt
+      - CAMERA_LOCATION=Townhall
+      - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
+      - RTSP_OUTPUT=rtsp://emulator-module:8554/live-1
+      - CLASS_IDS=0,1,16,2,3,5,7
+      - INTEREST_LINE_COORDINATES=960,0
+      - TRAFFIC_LINE_COORDINATES=960,0
+      - SCALE_PERCENT=50
+      - DEFAULT_LINE_SIZE=2
+      - DEFAULT_FONT_SCALE=1
+      - DEFAULT_OFFSET=2
+    # Deploy on GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    ```

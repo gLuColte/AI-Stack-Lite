@@ -255,7 +255,7 @@ As an interesting experiment, let's use a public live camera stream from Sydney:
 - [Sydney Harbor Bridge Live Stream Link](http://220.233.144.165:8888/mjpg/video.mjpg)
 
 The Side by Side outcome is shown as following (**Left Stream Emulator Video**, **Right Inference Video**):
-![Live Harbour Bridge Counter](/markdown-images/live-bridge-count.gif)
+![Live Harbour Bridge Counter](/markdown-images/live-harbour-bridge-count.gif)
 
 
 ## Monitoring

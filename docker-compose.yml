@@ -100,7 +100,7 @@ services:
       - 8003:5000/tcp
     environment:
       - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mp.py
       - MODEL_PATH=yolov8x.pt
       - CAMERA_LOCATION=Bridge
       - RTSP_INPUT=http://220.233.144.165:8888/mjpg/video.mjpg
@@ -111,7 +111,7 @@ services:
       - SCALE_PERCENT=100
       - DEFAULT_LINE_SIZE=2
       - DEFAULT_FONT_SCALE=1
-      - DEFAULT_OFFSET=15
+      - DEFAULT_OFFSET=4
       - DEFAULT_GPU_DEVICE=1
     # Deploy on GPU
     deploy:

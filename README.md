@@ -68,6 +68,7 @@ This repository presents our proposed architecture designed to streamline monito
 - [ ] Grafana Live Streams (RTSP)
 - [ ] Cloud Deployment - Integration with Azure and AWS
 - [ ] ReadMe Documentation - Grafana/Influx/cAdvisor/NodeExporter/AlertManager
+- [ ] :exclamation: Issues: After Kubectl installation, WIFI is removed on Host
 
 ## Learning Goals
 - Docker
@@ -187,7 +188,7 @@ deploy:
 
 TBA
 
-### Execution - Kubernetes ( :exclamation: Issues: After Kubectl installation, WIFI is removed on Host)
+### Execution - Kubernetes
 
 Ensure to have [minikube](https://minikube.sigs.k8s.io/docs/start/) installed:
 

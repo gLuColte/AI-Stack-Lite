@@ -126,12 +126,18 @@ if __name__ == "__main__":
         "offset": DEFAULT_OFFSET,
     }
     
+    # Message Input
+    # message_input_dict = {
+        
+    # }
+    
     ###############################################
     ############# Algorithm Execution #############
     ###############################################
     
     # Frame Queue
     frame_queue = multiprocessing.Queue(maxsize=60) 
+    message_queue = multiprocessing.Queue(maxsize=60)
 
     # Defining Threads
     frame_receive_process = multiprocessing.Process(
@@ -140,9 +146,15 @@ if __name__ == "__main__":
     )
     post_processing_process = multiprocessing.Process(
         target=post_processing_function, 
-        args=(frame_queue, post_proccessing_input_dict)
+        args=(frame_queue, message_queue, post_proccessing_input_dict)
     )
+    # message_process = multiprocessing.Process(
+    #     target=message_function,
+    #     args=(message_queue, message_input_dict)
+    # )
+    
     
     # Starting
     frame_receive_process.start()
     post_processing_process.start()
+    # message_process.start()

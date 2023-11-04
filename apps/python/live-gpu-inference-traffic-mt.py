@@ -127,12 +127,18 @@ if __name__ == "__main__":
         "offset": DEFAULT_OFFSET,
     }
     
+    # Message Input
+    # message_input_dict = {
+        
+    # }
+    
     ###############################################
     ############# Algorithm Execution #############
     ###############################################
     
     # Frame Queue
     frame_queue = queue.Queue(maxsize=60) 
+    message_queue = queue.Queue(maxsize=60)
 
     # Defining Threads
     frame_receive_thread = threading.Thread(
@@ -141,10 +147,14 @@ if __name__ == "__main__":
     )
     post_processing_thread = threading.Thread(
         target=post_processing_function, 
-        args=(frame_queue, post_proccessing_input_dict)
+        args=(frame_queue, input_message_queue, post_proccessing_input_dict)
     )
+    # message_thread = threading.Thread(
+    #     target=message_function,
+    #     args=(message_queue, message_input_dict)
+    # )
     
     # Starting
     frame_receive_thread.start()
     post_processing_thread.start()
-    
+    # message_thread.start()

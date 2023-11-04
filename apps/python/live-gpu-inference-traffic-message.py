@@ -343,55 +343,7 @@ def stream_function():
                 operating_frame.astype(np.uint8).tobytes()
             )
 
-def message_function():
-    """
-    # Use default dictionary structure
-                dict_structure = {
-                    "measurement": "h2o_feet",
-                    "tags": {"location": "coyote_creek"},
-                    "fields": {"water_level": 1.0},
-                    "time": 1
-                }
-                point = Point.from_dict(dict_structure, WritePrecision.NS)
-    """
-    
-    print("Start Message Thread")
-    
-    # Initialize Influx DB
-    client = influxdb_client.InfluxDBClient(
-        url=INFLUX_DB_URL,
-        username=INFLUX_DB_USERNAME, 
-        password=INFLUX_DB_PASSWORD,
-        org=INFLUX_DB_ORG
-    )
-    write_api = client.write_api(write_options=SYNCHRONOUS)
-    
-    message_counter = 1
-    while True:
-        if message_queue.empty() !=True:
-            # Get Frame
-            operating_message = message_queue.get()
-            
-            # Check
-            print(f"Retrieved Message:\n{operating_message}")
-            
-            # Creating Data Point
-            data_dict = {
-                "measurement": MEASUREMENT_NAME,
-                "tags": {
-                    "location": CAMERA_LOCATION
-                },
-                "fields": {k:v for k,v in operating_message.items()}
-            }
-            
-            # point
-            point = influxdb_client.Point(data_dict)
-            
-            # Write
-            write_api.write(bucket=BUCKET_NAME, org=INFLUX_DB_ORG, record=data_point)
-            print(f"Inserted {count} records")
-            message_counter+=1
-    
+
 
 ##########################################################
 ######################### Main ###########################

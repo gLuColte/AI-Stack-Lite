@@ -137,7 +137,7 @@ def yx_counter_function(
 ################### Thread Functions #####################
 ##########################################################
 
-def frame_receive_function(input_queue, input_rtsp_path):
+def frame_receive_function(input_frame_queue, input_rtsp_path):
     print(f"Started Frame Recevie Function with: {input_rtsp_path}")
     
     # Initialize
@@ -148,13 +148,13 @@ def frame_receive_function(input_queue, input_rtsp_path):
     while True:
         try:
             ret, frame = stream_cap.read()
-            input_queue.put(frame)
+            input_frame_queue.put(frame)
         except Exception as error:
             print(f"Frame Receive Function Error:\n{error}")
             time.sleep(5)
             continue
 
-def post_processing_function(input_queue, input_json):
+def post_processing_function(input_frame_queue, input_message_queue, input_json):
     
     print(f"Started Post Processing Function with inputs:\n{input_json}")
     ###############################################
@@ -272,14 +272,14 @@ def post_processing_function(input_queue, input_json):
 
     # FLUSH queue before start, avoding delays
     print("Flushing Queue Before start")
-    while not input_queue.empty():
-        input_queue.get()
+    while not input_frame_queue.empty():
+        input_frame_queue.get()
 
     # Begin Iteration:
     print("Begin Post Processing Iteration")
     while True:
         # Get Frame
-        frame=input_queue.get()
+        frame=input_frame_queue.get()
         
         # Resizing frame
         operating_frame = resize_frame(frame, scale_percent)
@@ -375,6 +375,17 @@ def post_processing_function(input_queue, input_json):
                     counter_out_classes,
                     offset
             )
+            
+            # Message Sending
+            # message_queue.put(
+            #     {
+            #         "uuid": uuid.uuid4(),
+            #         "label": class_name,
+            #         "confidence": round(confidence, 2),
+            #         "captured_timestamp": datetime.now(timezone.utc).isoformat(),
+            #         "object_snippet": base64.b64encode(cv2.imencode('.jpg', frame[ymin:ymax, xmin:xmax])[1])
+            #     }
+            # )
                     
             ###############################################
             ###############################################
@@ -452,3 +463,64 @@ def post_processing_function(input_queue, input_json):
         ffmpeg_process.stdin.write(
             operating_frame.astype(np.uint8).tobytes()
         )
+
+def message_function(input_message_queue, input_json):
+    """
+    # Use default dictionary structure
+                dict_structure = {
+                    "measurement": "h2o_feet",
+                    "tags": {"location": "coyote_creek"},
+                    "fields": {"water_level": 1.0},
+                    "time": 1
+                }
+                point = Point.from_dict(dict_structure, WritePrecision.NS)
+    """
+    
+    print("Start Message Thread")
+    ###############################################
+    ############# Reading Variables ###############
+    ###############################################
+    
+    ###############################################
+    
+    ############ Configuration Setup ##############
+    ###############################################
+    
+    # Initialize Influx DB
+    client = influxdb_client.InfluxDBClient(
+        url=INFLUX_DB_URL,
+        username=INFLUX_DB_USERNAME, 
+        password=INFLUX_DB_PASSWORD,
+        org=INFLUX_DB_ORG
+    )
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+    
+    ###############################################
+    ############# Starting Iterator ###############
+    ###############################################
+    message_counter = 1
+    while True:
+        if input_message_queue.empty() !=True:
+            # Get Frame
+            operating_message = input_message_queue.get()
+            
+            # Check
+            print(f"Retrieved Message:\n{operating_message}")
+            
+            # Creating Data Point
+            data_dict = {
+                "measurement": MEASUREMENT_NAME,
+                "tags": {
+                    "location": CAMERA_LOCATION
+                },
+                "fields": {k:v for k,v in operating_message.items()}
+            }
+            
+            # point
+            point = influxdb_client.Point(data_dict)
+            
+            # Write
+            write_api.write(bucket=BUCKET_NAME, org=INFLUX_DB_ORG, record=data_point)
+            print(f"Inserted {count} records")
+            message_counter+=1
+    

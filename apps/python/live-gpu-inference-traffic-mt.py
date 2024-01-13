@@ -147,7 +147,7 @@ if __name__ == "__main__":
     )
     post_processing_thread = threading.Thread(
         target=post_processing_function, 
-        args=(frame_queue, input_message_queue, post_proccessing_input_dict)
+        args=(frame_queue, message_queue, post_proccessing_input_dict)
     )
     # message_thread = threading.Thread(
     #     target=message_function,

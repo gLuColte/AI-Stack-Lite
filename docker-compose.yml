@@ -51,7 +51,7 @@ services:
       - 8001:5000/tcp
     environment:
       - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mp.py
       - MODEL_PATH=yolov8x.pt
       - CAMERA_LOCATION=Townhall
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-1
@@ -74,7 +74,7 @@ services:
       - 8002:5000/tcp
     environment:
       - RUN_TYPE=python
-      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mt.py
+      - RUN_SCRIPT_PATH=apps/python/live-gpu-inference-traffic-mp.py
       - MODEL_PATH=yolov8x.pt
       - CAMERA_LOCATION=Townhall
       - RTSP_INPUT=rtsp://emulator-module:8554/sample-2
@@ -120,6 +120,28 @@ services:
           devices:
             - driver: nvidia
               count: 2
+              capabilities: [gpu]
+  python-module-4:
+    image: ai-stack-lite-run-1:latest
+    ports:
+      - 8004:5000/tcp
+    environment:
+      - RUN_TYPE=python
+      - RUN_SCRIPT_PATH=apps/python/live-cpu-data-generator.py
+      - INFLUX_DB_URL=http://influxdb:8086
+      - INFLUX_DB_USERNAME=admin
+      - INFLUX_DB_PASSWORD=admin123
+      - INFLUX_DB_ORG=ai-playground
+      - MEASUREMENT_NAME=census
+      - BUCKET_NAME=alien-observatory
+      
+    # Deploy on GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
               capabilities: [gpu]
   ####################################
   ########## Node Exporter ###########
